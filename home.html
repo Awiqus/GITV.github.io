@@ -1,0 +1,40 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Genshin Abyss Tourney</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Abyss Speedrun Rankings</h1>
+    <table class="table table-dark table-striped" id="rankings">
+        <tr><th>Rank</th><th>Player</th><th>Time</th><th>Wins</th></tr>
+        <tr><td>1</td><td>TravelerX</td><td>11:45</td><td>3</td></tr>
+        <tr><td>2</td><td>PyroKing</td><td>12:10</td><td>2</td></tr>
+    </table>
+    <h1>Character Stats</h1>
+    <ul>
+        <li>Keqing - Picks: 70%, Wins: 60%, Bans: 20%</li>
+        <li>Ganyu - Picks: 50%, Wins: 75%, Bans: 40%</li>
+    </ul>
+    <canvas id="pickChart" width="400" height="200"></canvas>
+<script>
+    const ctx = document.getElementById('pickChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Keqing', 'Ganyu'],
+            datasets: [{
+                data: [70, 50], // Pick rates
+                backgroundColor: ['#ff6384', '#36a2eb']
+            }]
+        },
+        options: { title: { display: true, text: 'Character Pick Rates' } }
+    });
+</script>
+<script>
+    Sortable.create(document.getElementById('rankings'));
+</script>
+</body>
+</html>
