@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Genshin Abyss Tourney - Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom w-100">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">GITV</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="home.html">Home</a>
+                <a class="nav-link active" href="stats.html">Stats</a>
+                <a class="nav-link" href="tournaments.html">Tournaments</a>
+                <a class="nav-link" href="news.html">News</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="text-center mt-4">Abyss Speedrun Rankings</h1>
+        <section id="rankings">
+            <table class="table table-dark table-striped" id="rankTable">
+                <thead>
+                    <tr><th>Rank</th><th>Player</th><th>Time 1</th><th>Time 2</th><th>Roster</th><th>Bans</th><th>Cost</th></tr>
+                </thead>
+                <tbody id="dynamicRows"></tbody>
+            </table>
+        </section>
+        <section id="char-stats">
+            <canvas id="pickChart" width="400" height="200"></canvas>
+        </section>
+    </div>
+    <script>
+        fetch('results.json')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#dynamicRows');
+                const tr = document.createElement('tr ');
+                tr.innerHTML = `<td>${index + 1}</td><td>${row.player}</td><td>${row.time1}</td><td>${row.time2}</td><td>${row.roster}</td><td>${row.bans}</td><td>${row.cost}</td>`;
+                tbody.appendChild(tr);
+            })
+            .catch(error => console.error('Error fetching results:', error));
+            
+
+            // Tally roster picks for pie chart
+            const rosterCounts = {};
+                data.forEach(row => {
+                    row.roster.split(',').forEach(char => {
+                        char = char.trim();
+                        rosterCounts[char] = (rosterCounts[char] || 0) + 1;
+                    });
+                });
+
+            const ctx = document.getElementById('pickChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(rosterCounts),
+                    datasets: [{data: Object.values(rosterCounts), backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff'] }]
+                },
+                options: { plugins: { title: { display: true, text: 'Character Pick Rates'}}}
+            })    
+            .catch(error => console.error('Error fetching results', error));
+
+    </script>
+</body>
+</html>
