@@ -1,0 +1,58 @@
+body {
+    background-color: #1a1a2e; 
+    color: white;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+.bg-custom {
+    background-color: #26A69A;
+}
+.container {
+    padding: 20px;
+}
+.mt-4 {
+    margin-top: 1.5rem; /* Bootstrap class for spacing */
+}
+.img-fluid {
+    max-width: 100%; /* Bootstrap class for responsive images */
+}
+.navbar {
+    min-height: 60px; /* Standardize height */
+    padding: 0; /* Remove default padding */
+}
+.navbar-brand {
+    padding-left: 15px; /* Consistent left padding */
+    margin-right: 20px; /* Space before links */
+}
+.navbar-nav {
+    margin-left: auto; /* Push links right */
+}
+.news-image {
+    max-height: 200px;
+    overflow: hidden;
+}
+#rankBody tr {
+    transition: opacity 0.15s ease;
+}
+th {
+    position: relative;
+    cursor: pointer; /* Shows it’s clickable */
+    transition: background-color 0.2s ease; /* Smooth darkening */
+}
+th:hover {
+    background-color: rgba(0, 0, 0, 0.3); /* Darken on hover */
+}
+.sort-arrow {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+}
+th:hover .sort-arrow {
+    display: inline; /* Shows on hover */
+}
+th.sorted .sort-arrow {
+    display: inline; /* Stay visible when sorted */
+}
