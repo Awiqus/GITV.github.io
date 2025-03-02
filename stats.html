@@ -34,11 +34,11 @@
         </section>
     </div>
     <script>
-        fetch('./results,json')
+        fetch('./results.json')
             .then(response => response.json())
             .then(data => {
                 //Populate table
-                const tbody = document.querySelector('#dynamycRows');
+                const tbody = document.querySelector('#dynamicRows');
                 data.forEach((row, index) => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -74,7 +74,7 @@
                         }]
                     },
                     options: {
-                        plugins: { ttle: { display: true, text: 'Character Pick Rates' } }                    
+                        plugins: { title: { display: true, text: 'Character Pick Rates' } }                    
                     }
                 });
             })
