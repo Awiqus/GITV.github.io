@@ -34,19 +34,27 @@
         </section>
     </div>
     <script>
-        fetch('results.json')
+        fetch('./results,json')
             .then(response => response.json())
             .then(data => {
-                const tbody = document.querySelector('#dynamicRows');
-                const tr = document.createElement('tr ');
-                tr.innerHTML = `<td>${index + 1}</td><td>${row.player}</td><td>${row.time1}</td><td>${row.time2}</td><td>${row.roster}</td><td>${row.bans}</td><td>${row.cost}</td>`;
-                tbody.appendChild(tr);
-            })
-            .catch(error => console.error('Error fetching results:', error));
-            
+                //Populate table
+                const tbody = document.querySelector('#dynamycRows');
+                data.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${row.player}</td>
+                        <td>${row.time1}</td>
+                        <td>${row.time2}</td>
+                        <td>${row.roster}</td>
+                        <td>${row.bans}</td>
+                        <td>${row.cost}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
 
-            // Tally roster picks for pie chart
-            const rosterCounts = {};
+                //Tally roster picks for pie
+                const rosterCounts = {};
                 data.forEach(row => {
                     row.roster.split(',').forEach(char => {
                         char = char.trim();
@@ -54,17 +62,23 @@
                     });
                 });
 
-            const ctx = document.getElementById('pickChart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(rosterCounts),
-                    datasets: [{data: Object.values(rosterCounts), backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff'] }]
-                },
-                options: { plugins: { title: { display: true, text: 'Character Pick Rates'}}}
-            })    
-            .catch(error => console.error('Error fetching results', error));
-
+                //Creating a pie chart
+                const ctx = document.getElementById('pickChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(rosterCounts),
+                        datasets : [{
+                            data: Object.values(rosterCounts),
+                            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff']
+                        }]
+                    },
+                    options: {
+                        plugins: { ttle: { display: true, text: 'Character Pick Rates' } }                    
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching results:', error));
     </script>
 </body>
 </html>
