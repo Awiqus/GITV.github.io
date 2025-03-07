@@ -17,6 +17,8 @@ body {
     max-width: 100%; /* Bootstrap class for responsive images */
 }
 .navbar {
+    background-color: #4a2c6d;
+    color: white;
     min-height: 60px; /* Standardize height */
     padding: 0; /* Remove default padding */
 }
