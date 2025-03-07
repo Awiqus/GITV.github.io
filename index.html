@@ -62,8 +62,33 @@
                     });
                 });
 
-                document.addEventListener('DOMContentLoaded', function() {
-                    new Sortable(document.getElementById('dynamicRows'), { animation: 150 });
+                //Sortable table
+                const table = document.getElementById('rankTable');
+                const tablebody = document.getElementById('dynamicRows'); // Target tbody
+                const headers = table.querySelectorAll('th');
+                headers.forEach(header => {
+                    header.addEventListener('click', () => {
+                        const headerIndex = Array.from(headers).indexOf(header);
+                        const isAscending = header.classList.contains('ascending');
+                        const direction = isAscending ? 1 : -1;
+                        const rows = Array.from(tablebody.querySelectorAll('tr'));
+                        rows.sort((a, b) => {
+                            const aVal = a.children[headerIndex].textContent;
+                            const bVal = b.children[headerIndex].textContent;
+                            if (headerIndex === 0 || headerIndex === 6) { // Rank or Cost
+                                return (Number(aVal) - Number(bVal)) * direction;
+                            }
+                            if (headerIndex === 2 || headerIndex === 3) { // Time 1, Time 2
+                                const aTime = aVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
+                                const bTime = bVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
+                                return (aTime - bTime) * direction;
+                            }
+                            return aVal.localeCompare(bVal) * direction;
+                        });
+                        rows.forEach(row => tablebody.appendChild(row));
+                        headers.forEach(h => h.classList.remove('ascending', 'descending'));
+                        header.classList.add(isAscending ? 'descending' : 'ascending');
+                    });
                 });
 
                 //Creating a pie chart
