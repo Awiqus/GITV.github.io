@@ -58,3 +58,5 @@ th:hover .sort-arrow {
 th.sorted .sort-arrow {
     display: inline; /* Stay visible when sorted */
 }
+th.ascending::after { content: ' ↑'; }
+th.descending::after { content: ' ↓'; }
