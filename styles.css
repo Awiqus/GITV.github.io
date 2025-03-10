@@ -16,6 +16,44 @@ body {
 .img-fluid {
     max-width: 100%; /* Bootstrap class for responsive images */
 }
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+.suggestions div {
+    padding: 5px;
+    cursor: pointer;
+}
+.suggestions div:hover {
+    background: #f0f0f0;
+}
+#globalSearch:focus + .suggestions, .suggestions div { /* Show when typing */
+    display: block;
+}
+#globalSearch {
+    background: #3a2155;
+    color: white;
+    border: none;
+}
+#globalSearch::placeholder {
+    color: #ccc;
+}
+.btn-outline-light {
+    border-color: #3a2155;
+}
+.btn-outline-light:hover {
+    background: #3a2155;
+    color: white;
+}
 .navbar {
     background-color: #4a2c6d;
     color: white;

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-custom w-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
         <div class="container">
             <a class="navbar-brand" href="home.html">GITV</a>
             <div class="navbar-nav">
@@ -16,9 +16,15 @@
                 <a class="nav-link active" href="index.html">Stats</a>
                 <a class="nav-link" href="tournaments.html">Tournaments</a>
                 <a class="nav-link" href="news.html">News</a>
+                <a class="nav-link" href="players.html">Players Profiles</a>
             </div>
+            <form class="d-flex ms-auto">
+                <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search players..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+                <div id="suggestions" class="suggestions"></div>
+            </form>
         </div>
-    </nav>
+        </nav>
     <div class="container">
         <h1 class="text-center mt-4">Abyss Speedrun Rankings</h1>
         <section id="rankings">
@@ -35,78 +41,119 @@
     </div>
     <script>
         fetch('./results.json')
-            .then(response => response.json())
-            .then(data => {
-                //Populate table
-                const tbody = document.querySelector('#dynamicRows');
-                data.forEach((row, index) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${row.player}</td>
-                        <td>${row.time1}</td>
-                        <td>${row.time2}</td>
-                        <td>${row.roster}</td>
-                        <td>${row.bans}</td>
-                        <td>${row.cost}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                //Tally roster picks for pie
-                const rosterCounts = {};
-                data.forEach(row => {
-                    row.roster.split(',').forEach(char => {
-                        char = char.trim();
-                        rosterCounts[char] = (rosterCounts[char] || 0) + 1;
-                    });
-                });
-
-                //Sortable table
-                const table = document.getElementById('rankTable');
-                const tablebody = document.getElementById('dynamicRows'); // Target tbody
-                const headers = table.querySelectorAll('th');
-                headers.forEach(header => {
-                    header.addEventListener('click', () => {
-                        const headerIndex = Array.from(headers).indexOf(header);
-                        const isAscending = header.classList.contains('ascending');
-                        const direction = isAscending ? 1 : -1;
-                        const rows = Array.from(tablebody.querySelectorAll('tr'));
-                        rows.sort((a, b) => {
-                            const aVal = a.children[headerIndex].textContent;
-                            const bVal = b.children[headerIndex].textContent;
-                            if (headerIndex === 0 || headerIndex === 6) { // Rank or Cost
-                                return (Number(aVal) - Number(bVal)) * direction;
-                            }
-                            if (headerIndex === 2 || headerIndex === 3) { // Time 1, Time 2
-                                const aTime = aVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
-                                const bTime = bVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
-                                return (aTime - bTime) * direction;
-                            }
-                            return aVal.localeCompare(bVal) * direction;
+        .then(response => response.json())
+        .then(data => {
+            // Search setup
+            const search = document.getElementById('globalSearch');
+            const suggestions = document.getElementById('suggestions');
+            search.addEventListener('input', () => {
+                const term = search.value.toLowerCase();
+                suggestions.innerHTML = '';
+                if (term) {
+                    const matches = data.filter(row => row.player.toLowerCase().includes(term))
+                                       .map(row => row.player)
+                                       .filter((v, i, a) => a.indexOf(v) === i);
+                    matches.forEach(player => {
+                        const div = document.createElement('div');
+                        div.textContent = player;
+                        div.addEventListener('click', () => {
+                            search.value = player;
+                            suggestions.innerHTML = '';
+                            filterContent(player);
                         });
-                        rows.forEach(row => tablebody.appendChild(row));
-                        headers.forEach(h => h.classList.remove('ascending', 'descending'));
-                        header.classList.add(isAscending ? 'descending' : 'ascending');
+                        suggestions.appendChild(div);
                     });
-                });
+                }
+                filterContent(term);
+            });
+            document.querySelector('form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                filterContent(search.value.toLowerCase());
+            });
+            function filterContent(term) {
+                if (window.location.pathname.includes('index.html')) {
+                    const rows = document.querySelectorAll('#dynamicRows tr');
+                    rows.forEach(row => {
+                        const player = row.cells[1].textContent.toLowerCase();
+                        row.style.display = player.includes(term) ? '' : 'none';
+                    });
+                } else if (window.location.pathname.includes('players.html')) {
+                    const profiles = document.querySelectorAll('#profileList p');
+                    profiles.forEach(p => {
+                        const player = p.textContent.toLowerCase();
+                        p.style.display = player.includes(term) ? '' : 'none';
+                    });
+                }
+            }
 
-                //Creating a pie chart
-                const ctx = document.getElementById('pickChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: Object.keys(rosterCounts),
-                        datasets : [{
-                            data: Object.values(rosterCounts),
-                            backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff', '#bc4f43', ]
-                        }]
-                    },
-                    options: {
-                        plugins: { title: { display: true, text: 'Character Pick Rates' } }                    
-                    }
+            // Table population
+            const tbody = document.querySelector('#dynamicRows');
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${row.player}</td>
+                    <td>${row.time1}</td>
+                    <td>${row.time2}</td>
+                    <td>${row.roster}</td>
+                    <td>${row.bans}</td>
+                    <td>${row.cost}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Sortable table
+            const table = document.getElementById('rankTable');
+            const tablebody = document.getElementById('dynamicRows');
+            const headers = table.querySelectorAll('th');
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    const headerIndex = Array.from(headers).indexOf(header);
+                    const isAscending = header.classList.contains('ascending');
+                    const direction = isAscending ? 1 : -1;
+                    const rows = Array.from(tablebody.querySelectorAll('tr'));
+                    rows.sort((a, b) => {
+                        const aVal = a.children[headerIndex].textContent;
+                        const bVal = b.children[headerIndex].textContent;
+                        if (headerIndex === 0 || headerIndex === 6) {
+                            return (Number(aVal) - Number(bVal)) * direction;
+                        }
+                        if (headerIndex === 2 || headerIndex === 3) {
+                            const aTime = aVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
+                            const bTime = bVal.split(':').reduce((acc, t) => acc * 60 + +t, 0);
+                            return (aTime - bTime) * direction;
+                        }
+                        return aVal.localeCompare(bVal) * direction;
+                    });
+                    rows.forEach(row => tablebody.appendChild(row));
+                    headers.forEach(h => h.classList.remove('ascending', 'descending'));
+                    header.classList.add(isAscending ? 'descending' : 'ascending');
                 });
-            })
+            });
+
+            // Pie chart
+            const rosterCounts = {};
+            data.forEach(row => {
+                row.roster.split(',').forEach(char => {
+                    char = char.trim();
+                    rosterCounts[char] = (rosterCounts[char] || 0) + 1;
+                });
+            });
+            const ctx = document.getElementById('pickChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(rosterCounts),
+                    datasets: [{
+                        data: Object.values(rosterCounts),
+                        backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff', '#bc4f43']
+                    }]
+                },
+                options: {
+                    plugins: { title: { display: true, text: 'Character Pick Rates' } }
+                }
+            });
+        })
             .catch(error => console.error('Error fetching results:', error));
     </script>
 </body>
