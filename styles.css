@@ -47,6 +47,9 @@ body {
 #globalSearch::placeholder {
     color: #ccc;
 }
+#globalSearch:not(:placeholder-shown) + .suggestions {
+    display: block;
+}
 .btn-outline-light {
     border-color: #3a2155;
 }

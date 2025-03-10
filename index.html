@@ -18,7 +18,7 @@
                 <a class="nav-link" href="news.html">News</a>
                 <a class="nav-link" href="players.html">Players Profiles</a>
             </div>
-            <form class="d-flex ms-auto">
+            <form class="d-flex ms-auto" style="position: relative;">
                 <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search players..." aria-label="Search">
                 <button class="btn btn-outline-light" type="submit">Search</button>
                 <div id="suggestions" class="suggestions"></div>
@@ -50,16 +50,14 @@
                 const term = search.value.toLowerCase();
                 suggestions.innerHTML = '';
                 if (term) {
-                    const matches = data.filter(row => row.player.toLowerCase().includes(term))
-                                       .map(row => row.player)
-                                       .filter((v, i, a) => a.indexOf(v) === i);
-                    matches.forEach(player => {
+                    const matches = [...new Set([...playerMatches, ...heroMatches])];
+                    matches.forEach(item => {
                         const div = document.createElement('div');
-                        div.textContent = player;
+                        div.textContent = item;
                         div.addEventListener('click', () => {
-                            search.value = player;
+                            search.value = item;
                             suggestions.innerHTML = '';
-                            filterContent(player);
+                            filterContent(item);
                         });
                         suggestions.appendChild(div);
                     });
@@ -71,17 +69,19 @@
                 filterContent(search.value.toLowerCase());
             });
             function filterContent(term) {
-                if (window.location.pathname.includes('index.html')) {
-                    const rows = document.querySelectorAll('#dynamicRows tr');
+                const rows = document.querySelectorAll('#dynamicRows tr');
+                const profiles = document.querySelectorAll('#profileList p');
+                if (rows.length) {
                     rows.forEach(row => {
                         const player = row.cells[1].textContent.toLowerCase();
-                        row.style.display = player.includes(term) ? '' : 'none';
+                        const roster = row.cells[4].textContent.toLowerCase();
+                        row.style.display = (player.includes(term) || roster.includes(term)) ? '' : 'none';
                     });
-                } else if (window.location.pathname.includes('players.html')) {
-                    const profiles = document.querySelectorAll('#profileList p');
+                }
+                if (profiles.length) {
                     profiles.forEach(p => {
-                        const player = p.textContent.toLowerCase();
-                        p.style.display = player.includes(term) ? '' : 'none';
+                        const text = p.textContent.toLowerCase();
+                        p.style.display = text.includes(term) ? '' : 'none';
                     });
                 }
             }
