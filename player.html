@@ -12,9 +12,9 @@
             <div class="navbar-nav">                    
                 <a class="nav-link" href="home.html">Home</a>
                 <a class="nav-link" href="index.html">Stats</a>
-                <a class="nav-link" href="players.html">Players Profiles</a>
                 <a class="nav-link" href="tournaments.html">Tournaments</a>
                 <a class="nav-link" href="news.html">News</a>
+                <a class="nav-link" href="players.html">Players Profiles</a>
             </div>
             <form class="d-flex ms-auto" style="position: relative;">
                 <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search players..." aria-label="Search">
@@ -59,9 +59,8 @@
         const params = new URLSearchParams(window.location.search);
         const alias = params.get('alias') || "Mark"; // Fallback
         const player = playerData[alias] || { region: "TBD", avatar: "default.png", name: "Unknown", twitter: "" };
-
         // Fill profile
-        document.getElementById('playerName').textContent = `${player.name} (${alias})`;
+        document.getElementById('playerName').textContent = `${player.alias} (${name})`;
         document.getElementById('playerAvatar').src = player.avatar;
         document.getElementById('playerAvatar').alt = alias;
         document.getElementById('playerAlias').textContent = alias;
