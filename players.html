@@ -41,13 +41,14 @@
             playerData.forEach(player => {
                 profileList.innerHTML += `
                     <div class="col-md-4 mb-3">
+                        <a href="player.html?alias=${player.alias}" class="text-decoration-none">
                         <div class="card bg-dark text-white">
                             <div class="card-body">
                                 <img src="${player.avatar}" alt="${player.alias}" class="rounded-circle mb-2" style="width: 80px; height: 80px;">
                                 <h5 class="card-title">${player.alias}</h5>
                                 <h6 class="card-subtitle mb-2">${player.name}</h6>
                                 <p class="card-text">Region: ${player.region}</p>
-                                ${player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm">Twitter</a>` : ""}
+                                ${player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm" onclick="event.stopPropagation();">Twitter</a>` : ""}
                             </div>
                         </div>
                     </div>
