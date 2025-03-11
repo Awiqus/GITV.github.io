@@ -86,7 +86,7 @@ body {
 }
 .player-card-link:hover .card {
     transform: translateY(-5px); /* Slight lift */
-    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3); /* Cyan glow */
+    box-shadow: 0 4px 15px #4a2c6d; /* Classic perple */
 }
 
 /* IRL names (h6) */
