@@ -26,7 +26,7 @@
         </nav>
         <div class="container">
             <h1 class="text-center mt-4">Players Profiles</h1>
-            <div id="profileList"></div>
+            <div class="row" id="profileList"></div>
         </div>
         <script>
             fetch('./results.json')
@@ -39,16 +39,16 @@
                         const term = search.value.toLowerCase();
                         suggestions.innerHTML = '';
                         if (term) {
-                            const matches = data.filter(row => row.player.toLowerCase().includes(term))
-                                               .map(row => row.player)
-                                               .filter((v, i, a) => a.indexOf(v) === i);
-                            matches.forEach(player => {
+                            const playerMatches = data.filter(row => row.player.toLowerCase().includes(term)).map(row => row.player);
+                            const heroMatches = data.flatMap(row => row.roster.split(',').map(h => h.trim())).filter(hero => hero.toLowerCase().includes(term));
+                            const matches = [...new Set([...playerMatches, ...heroMatches])];
+                            matches.forEach(item => {
                                 const div = document.createElement('div');
-                                div.textContent = player;
+                                div.textContent = item;
                                 div.addEventListener('click', () => {
-                                    search.value = player;
+                                    search.value = item;
                                     suggestions.innerHTML = '';
-                                    filterContent(player);
+                                    filterContent(item);
                                 });
                                 suggestions.appendChild(div);
                             });
@@ -59,24 +59,52 @@
                         e.preventDefault();
                         filterContent(search.value.toLowerCase());
                     });
-                    function filterContent(term) {
-                        const profiles = document.querySelectorAll('#profileList p');
-                        profiles.forEach(p => {
-                            const player = p.textContent.toLowerCase();
-                            p.style.display = player.includes(term) ? '' : 'none';
-                        });
+                     // Profiles
+                const profiles = {};
+                data.forEach(row => {
+                    const player = row.player;
+                    if (!profiles[player]) {
+                        profiles[player] = { runs: 0, bestTime: null, heroes: {} };
                     }
-        
-                    // Profiles list
-                    const profiles = {};
-                    data.forEach(row => {
-                        profiles[row.player] = (profiles[row.player] || 0) + 1;
-                    });
-                    const list = document.getElementById('profileList');
-                    Object.entries(profiles).forEach(([player, runs]) => {
-                        list.innerHTML += `<p>${player}: ${runs} runs</p>`;
+                    profiles[player].runs++;
+                    const time1Sec = row.time1.split(':').reduce((acc, t) => acc * 60 + +t, 0);
+                    if (!profiles[player].bestTime || time1Sec < profiles[player].bestTime) {
+                        profiles[player].bestTime = time1Sec;
+                    }
+                    row.roster.split(',').forEach(h => {
+                        h = h.trim();
+                        profiles[player].heroes[h] = (profiles[player].heroes[h] || 0) + 1;
                     });
                 });
+
+                const profileList = document.getElementById('profileList');
+                Object.entries(profiles).forEach(([player, stats]) => {
+                    const bestTimeStr = `${Math.floor(stats.bestTime / 60)}:${(stats.bestTime % 60).toString().padStart(2, '0')}`;
+                    const topHero = Object.entries(stats.heroes).sort((a, b) => b[1] - a[1])[0][0];
+                    profileList.innerHTML += `
+                        <div class="col-md-4 mb-3">
+                            <div class="card bg-dark text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">${player}</h5>
+                                    <p class="card-text">Runs: ${stats.runs}</p>
+                                    <p class="card-text">Best Time: ${bestTimeStr}</p>
+                                    <p class="card-text">Top Hero: ${topHero}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                function filterContent(term) {
+                    const cards = profileList.querySelectorAll('.col-md-4');
+                    cards.forEach(card => {
+                        const player = card.querySelector('.card-title').textContent.toLowerCase();
+                        const heroes = card.querySelectorAll('.card-text')[2].textContent.toLowerCase(); // Top Hero
+                        card.style.display = (player.includes(term) || heroes.includes(term)) ? '' : 'none';
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching results:', error));
         </script>
     </body>
 </html>
