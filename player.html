@@ -60,7 +60,7 @@
         const alias = params.get('alias') || "Mark"; // Fallback
         const player = playerData[alias] || { region: "TBD", avatar: "default.png", name: "Unknown", twitter: "" };
         // Fill profile
-        document.getElementById('playerName').textContent = `${player.alias} (${name})`;
+        document.getElementById('playerName').textContent = `${alias} (${player.name})`;
         document.getElementById('playerAvatar').src = player.avatar;
         document.getElementById('playerAvatar').alt = alias;
         document.getElementById('playerAlias').textContent = alias;
