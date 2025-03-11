@@ -30,8 +30,8 @@
         <script>
             const playerData = [
             { alias: "Mark", region: "EU", avatar: "avatar1.png", name: "Mrak Champ", twitter: "mark_genshin" },
-            { alias: "Alice", region: "NA", avatar: "avatar2.png", name: "Mrak Champ", twitter: "alice_plays" },
-            { alias: "Bob", region: "TBD", avatar: "default.png", name: "Mrak Champ", twitter: "" }
+            { alias: "Alice", region: "NA", avatar: "avatar2.png", name: "Alice de Rose", twitter: "alice_plays" },
+            { alias: "Bob", region: "TBD", avatar: "default.png", name: "Bob Conqueror", twitter: "" }
             ];
 
             
@@ -45,7 +45,7 @@
                             <div class="card-body">
                                 <img src="${player.avatar}" alt="${player.alias}" class="rounded-circle mb-2" style="width: 80px; height: 80px;">
                                 <h5 class="card-title">${player.alias}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">${player.name}</h6>
+                                <h6 class="card-subtitle mb-2">${player.name}</h6>
                                 <p class="card-text">Region: ${player.region}</p>
                                 ${player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm">Twitter</a>` : ""}
                             </div>
