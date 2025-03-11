@@ -5,7 +5,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="styles.css">
     </head>
-    <div id="profileList"></div>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
             <div class="container">
@@ -34,59 +33,20 @@
             { name: "Alice", region: "NA", avatar: "avatar2.png", twitter: "alice_plays" }
             ];
 
-            // Populate profiles
-            const profileList = document.getElementById('profileList');
-            playerData.forEach(player => {
-                profileList.innerHTML += `
-                    <div class="col-md-4 mb-3">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <img src="${player.avatar}" alt="${player.name}" class="rounded-circle mb-2" style="width: 80px; height: 80px;">
-                                <h5 class="card-title">${player.name}</h5>
-                                <p class="card-text">Region: ${player.region}</p>
-                                <a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm">Twitter</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
             fetch('./results.json')
-                .then(response => response.json())
-                .then(data => {
-                    // Search (same as index.html)
-                    const search = document.getElementById('globalSearch');
-                    const suggestions = document.getElementById('suggestions');
-                    search.addEventListener('input', () => {
-                        const term = search.value.toLowerCase();
-                        suggestions.innerHTML = '';
-                        if (term) {
-                            const playerMatches = data.filter(row => row.player.toLowerCase().includes(term)).map(row => row.player);
-                            const heroMatches = data.flatMap(row => row.roster.split(',').map(h => h.trim())).filter(hero => hero.toLowerCase().includes(term));
-                            const matches = [...new Set([...playerMatches, ...heroMatches])];
-                            matches.forEach(item => {
-                                const div = document.createElement('div');
-                                div.textContent = item;
-                                div.addEventListener('click', () => {
-                                    search.value = item;
-                                    suggestions.innerHTML = '';
-                                    filterContent(item);
-                                });
-                                suggestions.appendChild(div);
-                            });
-                        }
-                        filterContent(term);
-                    });
-                    document.querySelector('form').addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        filterContent(search.value.toLowerCase());
-                    });
-                     // Profiles
+            .then(response => response.json())
+            .then(data => {
+                // Merge with results.json
                 const profiles = {};
                 data.forEach(row => {
                     const player = row.player;
                     if (!profiles[player]) {
-                        profiles[player] = { runs: 0, bestTime: null, heroes: {} };
+                        profiles[player] = { 
+                            runs: 0, 
+                            bestTime: null, 
+                            heroes: {}, 
+                            ...playerData[player] || { region: "TBD", avatar: "default.png", twitter: "" }
+                        };
                     }
                     profiles[player].runs++;
                     const time1Sec = row.time1.split(':').reduce((acc, t) => acc * 60 + +t, 0);
@@ -99,30 +59,63 @@
                     });
                 });
 
+                // Populate profiles
                 const profileList = document.getElementById('profileList');
                 Object.entries(profiles).forEach(([player, stats]) => {
-                    const bestTimeStr = `${Math.floor(stats.bestTime / 60)}:${(stats.bestTime % 60).toString().padStart(2, '0')}`;
-                    const topHero = Object.entries(stats.heroes).sort((a, b) => b[1] - a[1])[0][0];
+                    const bestTimeStr = stats.bestTime ? `${Math.floor(stats.bestTime / 60)}:${(stats.bestTime % 60).toString().padStart(2, '0')}` : "N/A";
+                    const topHero = stats.heroes && Object.keys(stats.heroes).length ? Object.entries(stats.heroes).sort((a, b) => b[1] - a[1])[0][0] : "N/A";
                     profileList.innerHTML += `
                         <div class="col-md-4 mb-3">
                             <div class="card bg-dark text-white">
                                 <div class="card-body">
+                                    <img src="${stats.avatar}" alt="${player}" class="rounded-circle mb-2" style="width: 80px; height: 80px;">
                                     <h5 class="card-title">${player}</h5>
+                                    <p class="card-text">Region: ${stats.region}</p>
                                     <p class="card-text">Runs: ${stats.runs}</p>
                                     <p class="card-text">Best Time: ${bestTimeStr}</p>
                                     <p class="card-text">Top Hero: ${topHero}</p>
+                                    ${stats.twitter ? `<a href="https://twitter.com/${stats.twitter}" target="_blank" class="btn btn-outline-light btn-sm">Twitter</a>` : ""}
                                 </div>
                             </div>
                         </div>
                     `;
                 });
 
+                // Search
+                const search = document.getElementById('globalSearch');
+                const suggestions = document.getElementById('suggestions');
+                search.addEventListener('input', () => {
+                    const term = search.value.toLowerCase();
+                    suggestions.innerHTML = '';
+                    if (term) {
+                        const playerMatches = data.filter(row => row.player.toLowerCase().includes(term)).map(row => row.player);
+                        const heroMatches = data.flatMap(row => row.roster.split(',').map(h => h.trim())).filter(hero => hero.toLowerCase().includes(term));
+                        const matches = [...new Set([...playerMatches, ...heroMatches])];
+                        matches.forEach(item => {
+                            const div = document.createElement('div');
+                            div.textContent = item;
+                            div.addEventListener('click', () => {
+                                search.value = item;
+                                suggestions.innerHTML = '';
+                                filterContent(item);
+                            });
+                            suggestions.appendChild(div);
+                        });
+                    }
+                    filterContent(term);
+                });
+                document.querySelector('form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    filterContent(search.value.toLowerCase());
+                });
+
                 function filterContent(term) {
                     const cards = profileList.querySelectorAll('.col-md-4');
                     cards.forEach(card => {
                         const player = card.querySelector('.card-title').textContent.toLowerCase();
-                        const heroes = card.querySelectorAll('.card-text')[2].textContent.toLowerCase(); // Top Hero
-                        card.style.display = (player.includes(term) || heroes.includes(term)) ? '' : 'none';
+                        const region = card.querySelector('.card-text:nth-child(2)').textContent.toLowerCase(); // Region
+                        const topHero = card.querySelector('.card-text:nth-child(5)').textContent.toLowerCase(); // Top Hero
+                        card.style.display = (player.includes(term) || region.includes(term) || topHero.includes(term)) ? '' : 'none';
                     });
                 }
             })
