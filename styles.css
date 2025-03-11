@@ -74,6 +74,28 @@ body {
     max-height: 200px;
     overflow: hidden;
 }
+/* Fix blue link */
+.player-card-link {
+    text-decoration: none; /* No underline */
+    color: inherit; /* Keeps text white from .text-white */
+}
+
+/* Hover effect */
+.player-card-link .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.player-card-link:hover .card {
+    transform: translateY(-5px); /* Slight lift */
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3); /* Cyan glow */
+}
+
+/* IRL names (h6) */
+.card-subtitle {
+    font-weight: 300; /* Thinner */
+    font-family: ' cursive', cursive; /* Cursive style */
+    font-style: italic; /* Extra cursive vibe */
+    color: #b0b0b0; /* Lighter gray for contrast */
+}
 #rankBody tr {
     transition: opacity 0.15s ease;
 }
