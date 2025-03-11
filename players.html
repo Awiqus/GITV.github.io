@@ -34,27 +34,63 @@
             { alias: "Bob", region: "TBD", avatar: "", name: "Bob Conqueror", twitter: "" }
             ];
 
-            
-
+        
             // Populate profiles
             const profileList = document.getElementById('profileList');
             playerData.forEach(player => {
                 const avatarSrc = player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";    
-                profileList.innerHTML += `
-                    <div class="col-md-4 mb-3">
-                        <a href="player.html?alias=${player.alias}" class="player-card-link">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <img src="${avatarSrc}" alt="${player.alias}" class="rounded-circle mb-2" style="width: 80px; height: 80px;">
-                                <h5 class="card-title">${player.alias}</h5>
-                                <h6 class="card-subtitle mb-2">${player.name}</h6>
-                                <p class="card-text">Region: ${player.region}</p>
-                                ${player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm" onclick="event.stopPropagation();">Twitter</a>` : ""}
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                `;
+                
+                const col = document.createElement('div');
+            col.className = 'col-md-4 mb-3';
+
+            const link = document.createElement('a');
+            link.href = `player.html?alias=${player.alias}`;
+            link.className = 'player-card-link';
+
+            const card = document.createElement('div');
+            card.className = 'card bg-dark text-white';
+
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+
+            const img = document.createElement('img');
+            img.src = avatarSrc;
+            img.alt = player.alias;
+            img.className = 'rounded-circle mb-2';
+            img.style.width = '80px';
+            img.style.height = '80px';
+
+            const title = document.createElement('h5');
+            title.className = 'card-title';
+            title.textContent = player.alias;
+
+            const subtitle = document.createElement('h6');
+            subtitle.className = 'card-subtitle mb-2';
+            subtitle.textContent = player.name;
+
+            const region = document.createElement('p');
+            region.className = 'card-text';
+            region.textContent = `Region: ${player.region}`;
+
+            cardBody.appendChild(img);
+            cardBody.appendChild(title);
+            cardBody.appendChild(subtitle);
+            cardBody.appendChild(region);
+
+            if (player.twitter) {
+                const twitterLink = document.createElement('a');
+                twitterLink.href = `https://twitter.com/${player.twitter}`;
+                twitterLink.target = '_blank';
+                twitterLink.className = 'btn btn-outline-light btn-sm';
+                twitterLink.textContent = 'Twitter';
+                twitterLink.onclick = (e) => e.stopPropagation();
+                cardBody.appendChild(twitterLink);
+            }
+
+            card.appendChild(cardBody);
+            link.appendChild(card);
+            col.appendChild(link);
+            profileList.appendChild(col);
             });
 
             // Search
