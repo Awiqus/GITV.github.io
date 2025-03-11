@@ -39,6 +39,7 @@
             // Populate profiles
             const profileList = document.getElementById('profileList');
             playerData.forEach(player => {
+                const avatarSrc = player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";    
                 profileList.innerHTML += `
                     <div class="col-md-4 mb-3">
                         <a href="player.html?alias=${player.alias}" class="player-card-link">
@@ -51,6 +52,7 @@
                                 ${player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank" class="btn btn-outline-light btn-sm" onclick="event.stopPropagation();">Twitter</a>` : ""}
                             </div>
                         </div>
+                        </a>
                     </div>
                 `;
             });
@@ -62,14 +64,14 @@
                 const term = search.value.toLowerCase();
                 suggestions.innerHTML = '';
                 if (term) {
-                    const matches = playerData.filter(p => p.name.toLowerCase().includes(term) || p.region.toLowerCase().includes(term)).map(p => p.name);
-                    matches.forEach(name => {
+                    const matches = playerData.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term)).map(p => p.name);
+                    matches.forEach(alias => {
                         const div = document.createElement('div');
-                        div.textContent = name;
+                        div.textContent = alias;
                         div.addEventListener('click', () => {
-                            search.value = name;
+                            search.value = alias;
                             suggestions.innerHTML = '';
-                            filterContent(name);
+                            filterContent(alias);
                         });
                         suggestions.appendChild(div);
                     });
@@ -84,9 +86,9 @@
             function filterContent(term) {
                 const cards = profileList.querySelectorAll('.col-md-4');
                 cards.forEach(card => {
-                    const name = card.querySelector('.card-title').textContent.toLowerCase();
+                    const alias = card.querySelector('.card-title').textContent.toLowerCase();
                     const region = card.querySelector('.card-text').textContent.toLowerCase();
-                    card.style.display = (name.includes(term) || region.includes(term)) ? '' : 'none';
+                    card.style.display = (alias.includes(term) || region.includes(term)) ? '' : 'none';
                 });
             }
         </script>
