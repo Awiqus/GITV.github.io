@@ -92,6 +92,7 @@
                         socialLink.target = '_blank';
                         socialLink.className = 'btn btn-outline-light social-btn';
                         socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                        socialLink.onclick = (e) => e.stopPropagation();
                         linkContainer.appendChild(socialLink);
                     }
                 });
