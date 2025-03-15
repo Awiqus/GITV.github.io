@@ -126,3 +126,25 @@ th.descending::after { content: ' ↓'; }
 .card img {
     object-fit: cover; /* Keeps avatars neat */
 }
+.social-links {
+    display: flex;
+    gap: 8px; /* Space between buttons */
+    flex-wrap: wrap; /* Wrap if too many */
+}
+
+.social-btn {
+    width: 32px; /* Square */
+    height: 32px;
+    padding: 0; /* No padding, just icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px; /* Icon size */
+    border-radius: 4px; /* Slight curve */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.social-btn:hover {
+    background-color: #3a2155; /* Hover color */
+    transform: scale(1.1); /* Slight pop */
+}

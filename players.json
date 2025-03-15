@@ -6,7 +6,12 @@
         "region": "EU",
         "avatar": "",
         "links": {
-          "twitter": ""
+            "twitter": "",
+            "twitch": "marklive",
+            "youtube": "markgenshin",
+            "telegram": "markchamp",
+            "vk": "markchampvk",
+            "akasha": "markprofile"
         }
       },
       {
@@ -15,7 +20,9 @@
         "region": "EU",
         "avatar": "",
         "links": {
-          "twitter": "mark_genshin"
+            "twitter": "alice_plays",
+            "twitch": "alicegaming",
+            "akasha": "alicederose"
         }
       },
       {
@@ -24,7 +31,7 @@
         "region": "SA",
         "avatar": "",
         "links": {
-
+            "youtube": "bobconquers"
         }
       }
     ]
