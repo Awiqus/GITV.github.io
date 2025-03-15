@@ -83,27 +83,33 @@
 
                         const subtitle = document.createElement('h6');
                         subtitle.className = 'card-subtitle mb-2';
-                        subtitle.textContent = player.name;
+                        subtitle.textContent = player.name || "Unknown";
 
                         const region = document.createElement('p');
                         region.className = 'card-text';
                         region.textContent = `Region: ${player.region}`;
 
+                        const linkContainer = document.createElement('div'); // Define it!
+                        linkContainer.className = 'social-links mt-2';
+
                         Object.keys(player.links).forEach(platform => {
-                            const socialLink = document.createElement('a');
-                            socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
-                            socialLink.target = '_blank';
-                            socialLink.className = 'btn btn-outline-light social-btn';
-                            socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
-                            socialLink.onclick = (e) => e.stopPropagation();
-                            linkContainer.appendChild(socialLink);
+                            if (player.links[platform]) {
+                                const socialLink = document.createElement('a');
+                                socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
+                                socialLink.target = '_blank';
+                                socialLink.className = 'btn btn-outline-light social-btn';
+                                socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                                socialLink.onclick = (e) => e.stopPropagation();
+                                linkContainer.appendChild(socialLink);
+                            }
                         });
 
                         cardBody.appendChild(img);
                         cardBody.appendChild(title);
                         cardBody.appendChild(subtitle);
                         cardBody.appendChild(region);
-                        
+                        cardBody.appendChild(linkContainer); // Append it!
+
 
                         card.appendChild(cardBody);
                         link.appendChild(card);

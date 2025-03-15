@@ -50,8 +50,26 @@
         </div>
     </div>
     <script>
+        const linkIcons = {
+            twitter: 'fa-brands fa-x-twitter',
+            twitch: 'fa-brands fa-twitch',
+            telegram: 'fa-brands fa-telegram',
+            youtube: 'fa-brands fa-youtube',
+            vk: 'fa-brands fa-vk',
+            akasha: 'fa-solid fa-user'
+        };
+
+        const linkUrls = {
+            twitter: 'https://twitter.com/',
+            twitch: 'https://twitch.tv/',
+            telegram: 'https://t.me/',
+            youtube: 'https://youtube.com/@',
+            vk: 'https://vk.com/',
+            akasha: 'https://akasha.cv/'
+        };
+
         const params = new URLSearchParams(window.location.search);
-        const alias = params.get('alias') || "Mark";
+        const alias = params.get('alias') || "DzeN";
 
         fetch('players.json')
             .then(response => response.json())
@@ -63,9 +81,21 @@
                 document.getElementById('playerAvatar').src = player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
                 document.getElementById('playerAvatar').alt = alias;
                 document.getElementById('playerAlias').textContent = alias;
-                document.getElementById('playerFullName').textContent = player.name;
+                document.getElementById('playerFullName').textContent = player.name || "Unknown";
                 document.getElementById('playerRegion').textContent = player.region;
-                document.getElementById('playerTwitter').innerHTML = player.links.twitter ? `<a href="https://twitter.com/${player.links.twitter}" target="_blank">${player.links.twitter}</a>` : "N/A";
+                
+                const linkContainer = document.getElementById('playerLinks');
+                Object.keys(player.links).forEach(platform => {
+                    if (player.links[platform]) {
+                        const socialLink = document.createElement('a');
+                        socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
+                        socialLink.target = '_blank';
+                        socialLink.className = 'btn btn-outline-light social-btn';
+                        socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                        linkContainer.appendChild(socialLink);
+                    }
+                });
+
 
                 // Fetch runs
                 fetch('./results.json')
