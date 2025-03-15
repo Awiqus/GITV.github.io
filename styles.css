@@ -150,7 +150,7 @@ th.descending::after { content: ' ↓'; }
 }
 
 .fa-akasha {
-    background-image: url('images/akasha-logo-clean.svg');
+    background-image: url('images/akashaBW-clean.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
