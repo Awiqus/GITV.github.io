@@ -151,7 +151,7 @@ th.descending::after { content: ' ↓'; }
 
 .fa-akasha {
     background-image: url('images/akashaBW-clean.svg');
-    background-size: contain;
+    background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: center;
     width: 20px;
@@ -173,6 +173,7 @@ th.descending::after { content: ' ↓'; }
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
     color: #fff !important; /* White fill */
     background-color: #212528; /* RGB(33, 37, 40) */
+    position: relative; /* Ensure background applies correctly */
 }
 
 .social-btn:hover {
