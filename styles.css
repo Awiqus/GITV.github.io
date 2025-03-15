@@ -149,7 +149,7 @@ th.descending::after { content: ' ↓'; }
     transform: scale(1.1); /* Slight pop */
 }
 
-.da-akasha {
+.fa-akasha {
     background-image: url('images/akashaBW-clean.svg');
     background-size: contain;
     background-repeat: no-repeat;
