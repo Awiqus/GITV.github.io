@@ -157,6 +157,8 @@ th.descending::after { content: ' ↓'; }
     width: 20px;
     height: 20px;
     display: inline-block;
+    /* Force the fill color to inherit from parent */
+    color: inherit;
 }
 
 .social-btn {

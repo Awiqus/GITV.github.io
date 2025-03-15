@@ -98,13 +98,8 @@
                                 socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
                                 socialLink.target = '_blank';
                                 socialLink.className = 'btn btn-outline-light social-btn';
-                                if (platform === 'akasha') {
-                                    const img = document.createElement('img');
-                                    img.src = linkIcons[platform];
-                                    img.alt = 'Akasha';
-                                    img.style.width = '20px'; // Adjust to fit button
-                                    img.style.height = '20px';
-                                    socialLink.appendChild(img);
+                                if (linkIcons[platform].startsWith('fa-') && !linkIcons[platform].includes(' ')) {
+                                    socialLink.classList.add(linkIcons[platform]);
                                 } else {
                                     socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
                                 }
