@@ -150,15 +150,11 @@ th.descending::after { content: ' ↓'; }
 }
 
 .fa-akasha {
-    background-image: url('images/akashaBW-clean.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 32px;
-    height: 32px;
-    display: inline-block;
-    /* Force the fill color to inherit from parent */
-    color: #fff !important; /* Ensure white fill and stroke */
+    width: 20px;
+    height: 20px;
+    background-color: white; /* This controls the icon color */
+    mask-image: url('images/akashaBW-clean.svg'); /* Ensures it follows the shape */
+    -webkit-mask-image: url('images/akashaBW-clean.svg'); /* Safari support */
 }
 
 .social-btn {
