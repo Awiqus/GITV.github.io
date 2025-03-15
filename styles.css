@@ -148,3 +148,36 @@ th.descending::after { content: ' ↓'; }
     background-color: #3a2155; /* Hover color */
     transform: scale(1.1); /* Slight pop */
 }
+
+.fa-akasha {
+    background-image: url('images/akasha-logo-clean.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.social-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    color: #fff !important; /* White fill */
+    background-color: transparent;
+}
+
+.social-btn:hover {
+    background-color: #3a2155;
+    color: #ddd !important; /* Grey fill on hover */
+}
+
+.social-btn i {
+    font-size: 16px;
+}
