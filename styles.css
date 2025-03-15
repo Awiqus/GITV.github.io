@@ -158,7 +158,7 @@ th.descending::after { content: ' ↓'; }
     height: 20px;
     display: inline-block;
     /* Force the fill color to inherit from parent */
-    color: inherit;
+    color: #fff !important; /* Ensure white fill and stroke */
 }
 
 .social-btn {
@@ -172,7 +172,7 @@ th.descending::after { content: ' ↓'; }
     border-radius: 4px;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
     color: #fff !important; /* White fill */
-    background-color: transparent;
+    background-color: #212528; /* RGB(33, 37, 40) */
 }
 
 .social-btn:hover {
