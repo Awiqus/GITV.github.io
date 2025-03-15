@@ -49,74 +49,74 @@
         </div>
     </div>
     <script>
-        const playerData = {
-            "Mark": { region: "EU", avatar: "avatar1.png", name: "Mrak Champ", twitter: "mark_genshin" },
-            "Alice": { region: "NA", avatar: "avatar2.png", name: "Alice de Rose", twitter: "alice_plays" },
-            "Bob": { region: "TBD", avatar: "default.png", name: "Bob Conqueror", twitter: "" }
-        };
-
-        // Get alias from URL
         const params = new URLSearchParams(window.location.search);
-        const alias = params.get('alias') || "Mark"; // Fallback
-        const player = playerData[alias] || { region: "TBD", avatar: "default.png", name: "Unknown", twitter: "" };
-        // Fill profile
-        document.getElementById('playerName').textContent = `${alias} (${player.name})`;
-        document.getElementById('playerAvatar').src = player.avatar;
-        document.getElementById('playerAvatar').alt = alias;
-        document.getElementById('playerAlias').textContent = alias;
-        document.getElementById('playerFullName').textContent = player.name;
-        document.getElementById('playerRegion').textContent = player.region;
-        document.getElementById('playerTwitter').innerHTML = player.twitter ? `<a href="https://twitter.com/${player.twitter}" target="_blank">${player.twitter}</a>` : "N/A";
+        const alias = params.get('alias') || "Mark";
 
-        // Fetch runs
-        fetch('./results.json')
+        fetch('players.json')
             .then(response => response.json())
             .then(data => {
-                const runs = data.filter(row => row.player === alias);
-                const runList = document.getElementById('runList');
-                if (runs.length === 0) {
-                    runList.innerHTML = '<tr><td colspan="6">No runs recorded</td></tr>';
-                } else {
-                    runs.forEach((run, index) => {
-                        runList.innerHTML += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${run.time1}</td>
-                                <td>${run.time2}</td>
-                                <td>${run.roster}</td>
-                                <td>${run.bans}</td>
-                                <td>${run.cost}</td>
-                            </tr>
-                        `;
-                    });
-                }
+                const playerData = data.players;
+                const player = playerData.find(p => p.alias === alias) || { region: "TBD", avatar: "", name: "Unknown", links: {} };
 
-                // Search (redirects to players.html)
-                const search = document.getElementById('globalSearch');
-                const suggestions = document.getElementById('suggestions');
-                search.addEventListener('input', () => {
-                    const term = search.value.toLowerCase();
-                    suggestions.innerHTML = '';
-                    if (term) {
-                        const matches = Object.keys(playerData).filter(p => p.toLowerCase().includes(term) || playerData[p].region.toLowerCase().includes(term));
-                        matches.forEach(p => {
-                            const div = document.createElement('div');
-                            div.textContent = p;
-                            div.addEventListener('click', () => {
-                                window.location.href = `player.html?alias=${p}`;
+                document.getElementById('playerName').textContent = `${alias} (${player.name})`;
+                document.getElementById('playerAvatar').src = player.avatar || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
+                document.getElementById('playerAvatar').alt = alias;
+                document.getElementById('playerAlias').textContent = alias;
+                document.getElementById('playerFullName').textContent = player.name;
+                document.getElementById('playerRegion').textContent = player.region;
+                document.getElementById('playerTwitter').innerHTML = player.links.twitter ? `<a href="https://twitter.com/${player.links.twitter}" target="_blank">${player.links.twitter}</a>` : "N/A";
+
+                // Fetch runs
+                fetch('./results.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const runs = data.filter(row => row.player === alias);
+                        const runList = document.getElementById('runList');
+                        if (runs.length === 0) {
+                            runList.innerHTML = '<tr><td colspan="6">No runs recorded</td></tr>';
+                        } else {
+                            runs.forEach((run, index) => {
+                                runList.innerHTML += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${run.time1}</td>
+                                        <td>${run.time2}</td>
+                                        <td>${run.roster}</td>
+                                        <td>${run.bans}</td>
+                                        <td>${run.cost}</td>
+                                    </tr>
+                                `;
                             });
-                            suggestions.appendChild(div);
+                        }
+
+                        // Search
+                        const search = document.getElementById('globalSearch');
+                        const suggestions = document.getElementById('suggestions');
+                        search.addEventListener('input', () => {
+                            const term = search.value.toLowerCase();
+                            suggestions.innerHTML = '';
+                            if (term) {
+                                const matches = playerData.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term)).map(p => p.alias);
+                                matches.forEach(p => {
+                                    const div = document.createElement('div');
+                                    div.textContent = p;
+                                    div.addEventListener('click', () => {
+                                        window.location.href = `player.html?alias=${p}`;
+                                    });
+                                    suggestions.appendChild(div);
+                                });
+                            }
                         });
-                    }
-                });
-                document.querySelector('form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const term = search.value.toLowerCase();
-                    const match = Object.keys(playerData).find(p => p.toLowerCase() === term);
-                    if (match) window.location.href = `player.html?alias=${match}`;
-                });
+                        document.querySelector('form').addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            const term = search.value.toLowerCase();
+                            const match = playerData.find(p => p.alias.toLowerCase() === term);
+                            if (match) window.location.href = `player.html?alias=${match.alias}`;
+                        });
+                    })
+                    .catch(error => console.error('Error fetching results:', error));
             })
-            .catch(error => console.error('Error fetching results:', error));
+            .catch(error => console.error('Error fetching players.json:', error));
     </script>
 </body>
 </html>
