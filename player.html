@@ -56,7 +56,7 @@
             telegram: 'fa-brands fa-telegram',
             youtube: 'fa-brands fa-youtube',
             vk: 'fa-brands fa-vk',
-            akasha: 'fa-akasha'
+            akasha: 'da-akasha'
         };
 
         const linkUrls = {
@@ -91,7 +91,7 @@
                         socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
                         socialLink.target = '_blank';
                         socialLink.className = 'btn btn-outline-light social-btn';
-                        if (linkIcons[platform].startsWith('fa-') && !linkIcons[platform].includes(' ')) {
+                        if (linkIcons[platform].startsWith('da-') && !linkIcons[platform].includes(' ')) {
                             socialLink.classList.add(linkIcons[platform]); // Add fa-akasha class directly
                         }  else {
                             socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
