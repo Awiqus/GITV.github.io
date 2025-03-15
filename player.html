@@ -56,7 +56,7 @@
             telegram: 'fa-brands fa-telegram',
             youtube: 'fa-brands fa-youtube',
             vk: 'fa-brands fa-vk',
-            akasha: 'fa-brands images/akasha-logo.png'
+            akasha: 'images/akasha-logo.png'
         };
 
         const linkUrls = {
@@ -91,7 +91,16 @@
                         socialLink.href = `${linkUrls[platform]}${player.links[platform]}`;
                         socialLink.target = '_blank';
                         socialLink.className = 'btn btn-outline-light social-btn';
-                        socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                        if (platform === 'akasha') {
+                            const img = document.createElement('img');
+                            img.src = linkIcons[platform];
+                            img.alt = 'Akasha';
+                            img.style.width = '20px'; // Adjust to fit button
+                            img.style.height = '20px';
+                            socialLink.appendChild(img);
+                        } else {
+                            socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                        }
                         socialLink.onclick = (e) => e.stopPropagation();
                         linkContainer.appendChild(socialLink);
                     }
