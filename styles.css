@@ -153,27 +153,7 @@ th.descending::after { content: ' ↓'; }
     color: #ddd !important; /* Grey fill on hover */
 }
 
-.fa-akasha {
-    background-image: url('images/akasha-logo.svg');
-    background-size: 20px 20px; /* Matches button icon size */
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    color: #fff !important; /* Ensures white fill */
-}
-
-
-.social-btn:hover {
-    background-color: #3a2155;
-    color: #ddd !important; /* Grey fill on hover */
-}
-
 .social-btn i {
     font-size: 16px;
     display: inline-block;
-}
-.fa-akasha i {
-    display: none; /* Hide default icon */
 }
