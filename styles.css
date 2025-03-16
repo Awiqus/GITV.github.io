@@ -132,13 +132,20 @@ th.descending::after { content: ' ↓'; }
     flex-wrap: wrap; /* Wrap if too many */
 }
 
-.s0 {
-    fill: #ffffff; /* White fill */
+.social-btn svg .s0 {
+    fill: #ffffff; /* Force the white part to stay white, or match the button color */
 }
-.s1 {
+.social-btn:hover svg .s0 {
+    fill: #f0f0f0; /* Slightly lighter color on hover, for example */
+}
+.social-btn svg .s1 {
     fill: none; /* Keep it transparent */
 }
 
+.social-btn svg {
+    vertical-align: middle; /* Align the SVG with the other icons */
+    fill: currentColor; /* Inherit the color from the parent (e.g., white for btn-outline-light) */
+}
 .social-btn {
     width: 32px;
     height: 32px;
@@ -149,9 +156,6 @@ th.descending::after { content: ' ↓'; }
     font-size: 16px;
     border-radius: 4px;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-    color: #fff !important; /* White fill for SVG */
-    background-color: #212528; /* RGB(33, 37, 40) */
-    position: relative;
 }
 
 .social-btn:hover {
@@ -163,4 +167,8 @@ th.descending::after { content: ' ↓'; }
 .social-btn i {
     font-size: 16px;
     display: inline-block;
+}
+.social-btn svg {
+    width: 20px;
+    height: 20px;
 }
