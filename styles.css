@@ -150,6 +150,7 @@ th.descending::after { content: ' ↓'; }
 .social-btn:hover {
     background-color: #3a2155; /* Hover color */
     transform: scale(1.1); /* Slight pop */
+    color: #ddd !important; /* Grey fill on hover */
 }
 
 .fa-akasha {
@@ -171,5 +172,8 @@ th.descending::after { content: ' ↓'; }
 
 .social-btn i {
     font-size: 16px;
-    display: none; /* Hide by default */
+    display: inline-block;
+}
+.fa-akasha i {
+    display: none; /* Hide default icon */
 }

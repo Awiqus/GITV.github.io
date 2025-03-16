@@ -93,8 +93,10 @@
                         socialLink.className = 'btn btn-outline-light social-btn';
                         if (linkIcons[platform].startsWith('fa-') && !linkIcons[platform].includes(' ')) {
                             socialLink.classList.add(linkIcons[platform]); // Add fa-akasha class directly
+                            console.log(`Added class for ${platform}: ${linkIcons[platform]}`);
                         }  else {
                             socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
+                            console.log(`Added <i> for ${platform}: ${linkIcons[platform]}`);
                         }
                         socialLink.onclick = (e) => e.stopPropagation();
                         linkContainer.appendChild(socialLink);
