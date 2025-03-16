@@ -132,6 +132,13 @@ th.descending::after { content: ' ↓'; }
     flex-wrap: wrap; /* Wrap if too many */
 }
 
+.s0 {
+    fill: #ffffff; /* White fill */
+}
+.s1 {
+    fill: none; /* Keep it transparent */
+}
+
 .social-btn {
     width: 32px;
     height: 32px;
