@@ -134,6 +134,10 @@ th.descending::after { content: ' ↓'; }
 
 .social-btn svg {
     vertical-align: middle; /* Align the SVG with the other icons */
+    fill: none;
+}
+.social-btn svg .s0 {
+    fill: #ffffff !important; /* Force the outer part to be white */
 }
 .social-btn svg .s1 {
     fill: none !important; /* Use !important to ensure it takes precedence */
@@ -148,6 +152,7 @@ th.descending::after { content: ' ↓'; }
     font-size: 16px;
     border-radius: 4px;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    background-color: rgba(0, 0, 0, 0.3); /* Dark background for debugging */
 }
 
 .social-btn:hover {
