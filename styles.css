@@ -132,10 +132,11 @@ th.descending::after { content: ' ↓'; }
     flex-wrap: wrap; /* Wrap if too many */
 }
 
-
 .social-btn svg {
     vertical-align: middle; /* Align the SVG with the other icons */
-    fill: currentColor; /* Inherit the color from the parent (e.g., white for btn-outline-light) */
+}
+.social-btn svg .s1 {
+    fill: none !important; /* Use !important to ensure it takes precedence */
 }
 .social-btn {
     width: 32px;
