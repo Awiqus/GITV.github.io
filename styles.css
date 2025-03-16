@@ -79,7 +79,6 @@ body {
     text-decoration: none; /* No underline */
     color: inherit; /* Keeps text white from .text-white */
 }
-
 /* Hover effect */
 .player-card-link .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -88,7 +87,6 @@ body {
     transform: translateY(-5px); /* Slight lift */
     box-shadow: 0 4px 15px #4a2c6d; /* Classic perple */
 }
-
 /* IRL names (h6) */
 .card-subtitle {
     font-weight: 300; /* Thinner */
@@ -131,16 +129,12 @@ th.descending::after { content: ' ↓'; }
     gap: 8px; /* Space between buttons */
     flex-wrap: wrap; /* Wrap if too many */
 }
-
 .social-btn svg {
     vertical-align: middle; /* Align the SVG with the other icons */
     fill: none;
 }
-.social-btn svg .s0 {
-    fill: #ffffff !important; /* Force the outer part to be white */
-} 
-.social-btn svg .s1 {
-    fill: #212529;
+.social-btn:hover svg .s1 {
+    fill: #3a2155; /* Brighter color on hover, matching other icons */
 }
 .social-btn {
     width: 32px;
@@ -154,13 +148,11 @@ th.descending::after { content: ' ↓'; }
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
     background-color: rgba(0, 0, 0, 0.3); /* Dark background for debugging */
 }
-
 .social-btn:hover {
     background-color: #3a2155; /* Hover color */
     transform: scale(1.1); /* Slight pop */
     color: #ddd !important; /* Grey fill on hover */
 }
-
 .social-btn i {
     font-size: 16px;
     display: inline-block;
