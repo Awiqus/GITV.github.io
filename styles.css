@@ -132,12 +132,6 @@ th.descending::after { content: ' ↓'; }
     flex-wrap: wrap; /* Wrap if too many */
 }
 
-.social-btn svg .s0 {
-    fill: none; /* Force the white part to stay white, or match the button color */
-}
-.social-btn svg .s1 {
-    fill: none; /* Keep it transparent */
-}
 
 .social-btn svg {
     vertical-align: middle; /* Align the SVG with the other icons */
