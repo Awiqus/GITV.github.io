@@ -139,8 +139,8 @@ th.descending::after { content: ' ↓'; }
 .social-btn svg .s0 {
     fill: #ffffff !important; /* Force the outer part to be white */
 } 
-.social-btn svg .s1 { /*s1 is inner part*/
-    fill: none !important; /* Use !important to ensure it takes precedence */
+.social-btn svg .s1 {
+    fill: #212529;
 }
 .social-btn {
     width: 32px;
