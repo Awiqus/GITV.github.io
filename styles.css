@@ -150,10 +150,14 @@ th.descending::after { content: ' ↓'; }
 }
 
 .fa-akasha {
+    background-image: url('images/akasha-favicon-clean.svg');
+    background-size: 20px 20px; /* Matches button icon size */
+    background-repeat: no-repeat;
+    background-position: center;
     width: 20px;
     height: 20px;
     display: inline-block;
-    color: white !important; /* Force it to be white */
+    color: #fff !important; /* Ensures white fill */
 }
 .social-btn {
     width: 32px;
@@ -165,9 +169,9 @@ th.descending::after { content: ' ↓'; }
     font-size: 16px;
     border-radius: 4px;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-    color: #fff !important; /* White fill */
+    color: #fff !important; /* White fill for SVG */
     background-color: #212528; /* RGB(33, 37, 40) */
-    position: relative; /* Ensure background applies correctly */
+    position: relative;
 }
 
 .social-btn:hover {
@@ -177,4 +181,5 @@ th.descending::after { content: ' ↓'; }
 
 .social-btn i {
     font-size: 16px;
+    display: none; /* Hide by default */
 }
