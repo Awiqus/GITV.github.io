@@ -35,7 +35,7 @@
                 telegram: 'fa-brands fa-telegram',
                 youtube: 'fa-brands fa-youtube',
                 vk: 'fa-brands fa-vk',
-                akasha: 'image/akashaBW.png'
+                akasha: 'image/akashaBW-logo.png'
             };
 
             const linkUrls = {
@@ -100,7 +100,7 @@
                                 socialLink.className = 'btn btn-outline-light social-btn';
                                 if (platform === 'akasha') {
                                     // Use PNG instead of SVG
-                                    socialLink.innerHTML = `<img src="images/akashaBW.png" alt="Akasha" style="width: 20px; height: 20px;">`;
+                                    socialLink.innerHTML = `<img src="images/akashaBW-logo.png" alt="Akasha" style="width: 20px; height: 20px;">`;
                                 } else {
                                     socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
                                 }
