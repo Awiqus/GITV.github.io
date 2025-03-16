@@ -133,15 +133,18 @@ th.descending::after { content: ' ↓'; }
 }
 
 .social-btn {
-    width: 32px; /* Square */
+    width: 32px;
     height: 32px;
-    padding: 0; /* No padding, just icon */
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px; /* Icon size */
-    border-radius: 4px; /* Slight curve */
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    color: #fff !important; /* White fill for SVG */
+    background-color: #212528; /* RGB(33, 37, 40) */
+    position: relative;
 }
 
 .social-btn:hover {
@@ -159,20 +162,7 @@ th.descending::after { content: ' ↓'; }
     display: inline-block;
     color: #fff !important; /* Ensures white fill */
 }
-.social-btn {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-    color: #fff !important; /* White fill for SVG */
-    background-color: #212528; /* RGB(33, 37, 40) */
-    position: relative;
-}
+
 
 .social-btn:hover {
     background-color: #3a2155;
