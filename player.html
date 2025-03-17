@@ -29,27 +29,56 @@
             </form>
         </div>    
     </nav>
-    <div class="player-header bg-dark position-relative">
-        <div class="container py-5">
+    <div class="player-header bg-dark position-relative mt-4">
+        <div class="player-container py-4">
             <div class="row align-items-center">
                 <div class="col-md-3 text-center">
-                    <img id="playerAvatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Player Avatar" class="rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #4a2c6d;">
+                    <img id="playerAvatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Player Avatar" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #4a2c6d;">
                 </div>
-                <div class="col-md-9">
-                    <h1 id="playerAlias" class="display-4 mb-1"></h1>
-                    <h4 id="playerName" class="text-muted mb-2"></h4>
-                    <p id="playerRegion" class="mb-1"></p>
-                    <p id="playerAge" class="mb-1"></p>
-                    <p id="playerPrize" class="mb-3"></p>
-                    <div id="socialLinks" class="social-links"></div>
+                <div class="col-12 col-md-9 player-info">
+                    <div class="social-links mb-3" id="socialLinks"></div>
+                    <h1 id="playerAlias" class="mb-2"></h1>
+                    <h4 id="playerName" class="player-subtext mb-2"></h4>
+                    <p id="playerRegion" class="player-subtext mb-1"></p>
+                    <p id="playerAge" class="player-subtext mb-1"></p>
+                    <p id="playerPrize" class="player-subtext mb-3"></p>
+                    <p id="playerTeam" class="player-subtext mb-0">Team: N/A</p>
                 </div>
             </div>
         </div>
         <div class="header-overlay"></div>
     </div>
     <div class="container mt-5">
-        <h2>Tournament History</h2>
-        <div id="tournamentHistory" class="mt-3"></div>
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showSection('tournaments')">Tournaments</button>
+            <button class="tab-btn" onclick="showSection('matches')">Matches</button>
+            <button class="tab-btn" onclick="showSection('news')">News</button>
+            <button class="tab-btn" onclick="showSection('stats')">Stats</button>
+        </div>
+        <div id="tournamentsSection" class="tab-content active">
+            <h2>Tournament History</h2>
+            <div id="tournamentHistory" class="mt-3"></div>
+            <div id="recentActivity" class="mt-4">
+                <h3>Recent Activity</h3>
+                <p>Latest result: Abyss Cup 2024 - 1st Place ($5000)</p>
+            </div>
+        </div>
+        <div id="matchesSection" class="tab-content">
+            <h2>Match History</h2>
+            <p>Match history coming soon...</p>
+        </div>
+        <div id="newsSection" class="tab-content">
+            <h2>Related News</h2>
+            <p>News related to this player coming soon...</p>
+        </div>
+        <div id="statsSection" class="tab-content">
+            <h2>Player Stats</h2>
+            <p>Stats coming soon...</p>
+        </div>
+        <div id="bioSection" class="mt-5">
+            <h2>About</h2>
+            <p>Bio coming soon...</p>
+        </div>
     </div>
     <script>
         // Global search handler
@@ -167,6 +196,16 @@
             akasha: 'https://akasha.cv/'
         };
 
+        // Tab switching
+        function showSection(section) {
+            const sections = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            sections.forEach(s => s.classList.remove('active'));
+            buttons.forEach(b => b.classList.remove('active'));
+            document.getElementById(`${section}Section`).classList.add('active');
+            document.querySelector(`[onclick="showSection('${section}')"]`).classList.add('active');
+        }
+
         // Load player profile
         async function loadPlayerProfile() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -195,8 +234,9 @@
                 document.getElementById('playerRegion').textContent = `Region: ${player.region || 'Unknown'}`;
                 document.getElementById('playerAge').textContent = `Age: ${player.age || 'N/A'}`;
                 document.getElementById('playerPrize').textContent = `Prize Money: $${player.prizeMoney || 0}`;
+                document.getElementById('playerTeam').textContent = `Team: ${player.team || 'N/A'}`;
 
-                // Populate social links
+                // Populate social links at the top
                 const socialLinks = document.getElementById('socialLinks');
                 Object.keys(player.links).forEach(platform => {
                     if (player.links[platform]) {
@@ -243,7 +283,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h5 class="mb-1">${tournament.name}</h5>
-                                    <p class="mb-0 text-muted">${tournament.date || 'Unknown date'}</p>
+                                    <p class="mb-0 player-subtext">${tournament.date || 'Unknown date'}</p>
                                 </div>
                                 <div class="text-end">
                                     <p class="mb-0">Place: ${result.place || 'N/A'}</p>
@@ -253,6 +293,17 @@
                         `;
                         tournamentHistory.appendChild(tournamentDiv);
                     });
+                }
+
+                // Update recent activity (placeholder)
+                const recentActivity = document.getElementById('recentActivity');
+                if (playerTournaments.length > 0) {
+                    const latest = playerTournaments[0];
+                    const result = latest.results.find(r => r.player === player.alias);
+                    recentActivity.innerHTML = `
+                        <h3>Recent Activity</h3>
+                        <p>Latest result: ${latest.name} - ${result.place} Place ($${result.prize})</p>
+                    `;
                 }
             } catch (error) {
                 console.error('Error loading player profile:', error);
