@@ -1,8 +1,8 @@
 body {
     background-color: #1a1a2e; 
     color: white;
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
+    margin: 0;
+    padding: 0;
 }
 .bg-custom {
     background-color: #4a2c6d; 
@@ -11,17 +11,17 @@ body {
     padding: 20px;
 }
 .mt-4 {
-    margin-top: 1.5rem; /* Bootstrap class for spacing */
+    margin-top: 1.5rem;
 }
 .img-fluid {
-    max-width: 100%; /* Bootstrap class for responsive images */
+    max-width: 100%;
 }
 .suggestions {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: #1a1a2e; /* Match your dark theme */
+    background-color: #1a1a2e;
     border: 1px solid #3a2155;
     border-top: none;
     border-radius: 0 0 4px 4px;
@@ -36,11 +36,12 @@ body {
     cursor: pointer;
 }
 .suggestions div:hover {
-    background-color: #3a2155; /* Match hover color */
+    background-color: #3a2155;
     color: #ddd;
 }
-#globalSearch:focus + .suggestions, .suggestions div { /* Show when typing */
-    display: block;
+#globalSearch:focus + .suggestions,
+.suggestions:hover {
+    display: block; /* Show when focused or hovered */
 }
 #globalSearch {
     background: #3a2155;
@@ -63,53 +64,50 @@ body {
 .navbar {
     background-color: #4a2c6d;
     color: white;
-    min-height: 60px; /* Standardize height */
-    padding: 0; /* Remove default padding */
+    min-height: 60px;
+    padding: 0;
 }
 .navbar-brand {
-    padding-left: 15px; /* Consistent left padding */
-    margin-right: 20px; /* Space before links */
+    padding-left: 15px;
+    margin-right: 20px;
 }
 .navbar-nav {
-    margin-left: auto; /* Push links right */
+    margin-left: auto;
 }
 .news-image {
     max-height: 200px;
     overflow: hidden;
 }
-/* Fix blue link */
 .player-card-link {
-    text-decoration: none; /* No underline */
-    color: inherit; /* Keeps text white from .text-white */
+    text-decoration: none;
+    color: inherit;
 }
-/* Hover effect */
 .player-card-link .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .player-card-link:hover .card {
-    transform: translateY(-5px); /* Slight lift */
-    box-shadow: 0 4px 15px #4a2c6d; /* Classic perple */
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px #4a2c6d;
 }
-/* IRL names (h6) */
 .card-subtitle {
-    font-weight: 300; /* Thinner */
-    font-family: ' cursive', cursive; /* Cursive style */
-    font-style: italic; /* Extra cursive vibe */
-    color: #b0b0b0; /* Lighter gray for contrast */
+    font-weight: 300;
+    font-family: 'cursive', cursive;
+    font-style: italic;
+    color: #b0b0b0;
 }
 #rankBody tr {
     transition: opacity 0.15s ease;
 }
 th {
     position: relative;
-    cursor: pointer; /* Shows it’s clickable */
-    transition: background-color 0.2s ease; /* Smooth darkening */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 th:hover {
-    background-color: rgba(0, 0, 0, 0.3); /* Darken on hover */
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .sort-arrow {
-    display: none; /* Hidden by default */
+    display: none;
     position: absolute;
     right: 5px;
     top: 50%;
@@ -117,27 +115,27 @@ th:hover {
     font-size: 12px;
 }
 th:hover .sort-arrow {
-    display: inline; /* Shows on hover */
+    display: inline;
 }
 th.sorted .sort-arrow {
-    display: inline; /* Stay visible when sorted */
+    display: inline;
 }
 th.ascending::after { content: ' ↑'; }
 th.descending::after { content: ' ↓'; }
 .card img {
-    object-fit: cover; /* Keeps avatars neat */
+    object-fit: cover;
 }
 .social-links {
     display: flex;
-    gap: 8px; /* Space between buttons */
-    flex-wrap: wrap; /* Wrap if too many */
+    gap: 8px;
+    flex-wrap: wrap;
 }
 .social-btn svg {
-    vertical-align: middle; /* Align the SVG with the other icons */
+    vertical-align: middle;
     fill: none;
 }
 .social-btn:hover svg .s1 {
-    fill: #3a2155; /* Brighter color on hover, matching other icons */
+    fill: #3a2155;
 }
 .social-btn {
     width: 32px;
@@ -149,12 +147,12 @@ th.descending::after { content: ' ↓'; }
     font-size: 16px;
     border-radius: 4px;
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-    background-color: rgba(0, 0, 0, 0.3); /* Dark background for debugging */
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .social-btn:hover {
-    background-color: #3a2155; /* Hover color */
-    transform: scale(1.1); /* Slight pop */
-    color: #ddd !important; /* Grey fill on hover */
+    background-color: #3a2155;
+    transform: scale(1.1);
+    color: #ddd !important;
 }
 .social-btn i {
     font-size: 16px;
@@ -166,19 +164,16 @@ th.descending::after { content: ' ↓'; }
 }
 .search-result-item {
     padding: 8px;
-    border-bottom: 1px solid #3a2155; /* Differentiative line */
+    border-bottom: 1px solid #3a2155;
     transition: background-color 0.2s ease;
 }
-
 .search-result-item:hover {
-    background-color: #3a2155; /* Hover effect */
+    background-color: #3a2155;
     color: #ddd;
 }
-
 .search-result-item a {
-    color: #f8f9fa; /* Match text color */
+    color: #f8f9fa;
 }
-
 .search-result-item a:hover {
-    color: #ddd; /* Maintain hover contrast */
+    color: #ddd;
 }
