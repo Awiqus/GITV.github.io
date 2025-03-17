@@ -20,21 +20,24 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    width: 200px;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 150px;
+    right: 0;
+    background-color: #1a1a2e; /* Match your dark theme */
+    border: 1px solid #3a2155;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
     overflow-y: auto;
     z-index: 1000;
     display: none;
 }
 .suggestions div {
-    padding: 5px;
+    padding: 8px 12px;
+    color: #f8f9fa;
     cursor: pointer;
 }
 .suggestions div:hover {
-    background: #f0f0f0;
+    background-color: #3a2155; /* Match hover color */
+    color: #ddd;
 }
 #globalSearch:focus + .suggestions, .suggestions div { /* Show when typing */
     display: block;
@@ -160,4 +163,22 @@ th.descending::after { content: ' ↓'; }
 .social-btn svg {
     width: 20px;
     height: 20px;
+}
+.search-result-item {
+    padding: 8px;
+    border-bottom: 1px solid #3a2155; /* Differentiative line */
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #3a2155; /* Hover effect */
+    color: #ddd;
+}
+
+.search-result-item a {
+    color: #f8f9fa; /* Match text color */
+}
+
+.search-result-item a:hover {
+    color: #ddd; /* Maintain hover contrast */
 }
