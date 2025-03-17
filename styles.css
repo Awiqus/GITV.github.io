@@ -95,6 +95,9 @@ body {
     position: relative;
     overflow: hidden;
     border-radius: 50px;
+    max-width: 1300px; /* Slightly larger than player-container to account for padding */
+    margin-left: auto; /* Center the header */
+    margin-right: auto; /* Center the header */
 }
 .header-overlay {
     position: absolute;
@@ -102,11 +105,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
     z-index: 1;
 }
 .player-container {
-    max-width: 600px; 
+    max-width: 1000px; 
     margin-left: auto;
     margin-right: auto;
     padding-left: 20px;
@@ -122,7 +124,7 @@ body {
     font-size: 2.5rem;
 }
 .player-header p {
-    color: #ddd;
+    color: #fff;
 }
 .player-subtext {
     color: #fff; 
