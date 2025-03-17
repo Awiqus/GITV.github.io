@@ -42,7 +42,6 @@
                     <p id="playerRegion" class="player-subtext mb-1"></p>
                     <p id="playerAge" class="player-subtext mb-1"></p>
                     <p id="playerPrize" class="player-subtext mb-3"></p>
-                    <p id="playerTeam" class="player-subtext mb-3"></p>
                 </div>
             </div>
         </div>
@@ -234,7 +233,6 @@
                 document.getElementById('playerRegion').textContent = `Region: ${player.region || 'Unknown'}`;
                 document.getElementById('playerAge').textContent = `Age: ${player.age || 'N/A'}`;
                 document.getElementById('playerPrize').textContent = `Prize Money: $${player.prizeMoney || 0}`;
-                document.getElementById('playerTeam').textContent = `Team: ${player.team || 'N/A'}`;
 
                 // Populate social links at the top
                 const socialLinks = document.getElementById('socialLinks');

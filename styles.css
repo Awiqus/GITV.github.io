@@ -241,6 +241,7 @@ th.descending::after { content: ' ↓'; }
     transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
     background-color: rgba(0, 0, 0, 0.3);
     text-decoration: none !important; /* Ensure links work */
+    z-index: 5;
 }
 .social-btn:hover {
     background-color: #3a2155;
