@@ -17,8 +17,8 @@
                     <a class="nav-link" href="news.html">News</a>
                     <a class="nav-link active" href="players.html">Players Profiles</a>
                 </div>
-                <form class="d-flex ms-auto" style="position: relative;">
-                    <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search players...">
+                <form class="d-flex ms-auto" style="position: relative;" onsubmit="handleGlobalSearch(event)">
+                    <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search...">
                     <button class="btn btn-outline-light" type="submit">Search</button>
                     <div id="suggestions" class="suggestions"></div>
                 </form>
@@ -29,6 +29,15 @@
             <div class="row" id="profileList"></div>
         </div>
         <script>
+            // Global search handler
+            function handleGlobalSearch(event) {
+                event.preventDefault();
+                const searchTerm = document.getElementById('globalSearch').value.trim();
+                if (searchTerm) {
+                    window.location.href = `search.html?term=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+
             const linkIcons = {
                 twitter: 'fa-brands fa-x-twitter',
                 twitch: 'fa-brands fa-twitch',
@@ -105,7 +114,7 @@
                                             <title>akashaBW</title>
                                             <style>
                                                 .s0 { fill: #ffffff }
-                                                .s1 { fill: #212529 } 
+                                                .s1 { fill: #212529 } `/*matches background color*/`
                                             </style>
                                             <g id="Background">
                                                 <path id="Path 1" class="s0" d="m7.2 6.6c0.1 3.2-0.6 6.4-2 9.2-1.2 2.3-2.2 4.4-2.2 4.7 0 0.3 2.1 0.4 4.8 0.3 3.5-0.1 5.7 0.5 8.7 2.4l4 2.5c0.8-7.9 2-12.1 3.3-14.4l2.2-4.3c-8.1 0.1-10.9-0.7-14.2-2.6l-4.7-2.7z"/>
@@ -137,21 +146,66 @@
                     // Search
                     const search = document.getElementById('globalSearch');
                     const suggestions = document.getElementById('suggestions');
-                    search.addEventListener('input', () => {
+
+                    async function loadAllDataForSuggestions() {
+                        const players = await fetch('players.json')
+                            .then(res => res.json())
+                            .then(data => data.players)
+                            .catch(() => []);
+                        const news = await fetch('news.json')
+                            .then(res => res.json())
+                            .catch(() => []);
+                        const tournaments = await fetch('tournaments.json')
+                            .then(res => res.json())
+                            .catch(() => []);
+                        return { players, news, tournaments };
+                    }
+
+                    search.addEventListener('input', async () => {
                         const term = search.value.toLowerCase();
                         suggestions.innerHTML = '';
                         if (term) {
-                            const matches = playerData.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term)).map(p => p.alias);
-                            matches.forEach(alias => {
+                            const { players, news, tournaments } = await loadAllDataForSuggestions();
+
+                            // Players
+                            const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
+                            playerMatches.forEach(p => {
                                 const div = document.createElement('div');
-                                div.textContent = alias;
+                                div.textContent = `Player: ${p.alias} (${p.region})`;
                                 div.addEventListener('click', () => {
-                                    search.value = alias;
+                                    searchInput.value = p.alias;
                                     suggestions.innerHTML = '';
-                                    filterContent(alias);
+                                    window.location.href = `search.html?term=${encodeURIComponent(p.alias)}`;
                                 });
                                 suggestions.appendChild(div);
                             });
+
+                            // News
+                            const newsMatches = news.filter(n => n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term));
+                            newsMatches.forEach(n => {
+                                const div = document.createElement('div');
+                                div.textContent = `News: ${n.title}`;
+                                div.addEventListener('click', () => {
+                                    searchInput.value = n.title;
+                                    suggestions.innerHTML = '';
+                                    window.location.href = `search.html?term=${encodeURIComponent(n.title)}`;
+                                });
+                                suggestions.appendChild(div);
+                            });
+
+                            // Tournaments
+                            const tourneyMatches = tournaments.filter(t => t.name.toLowerCase().includes(term) || (t.winner && t.winner.toLowerCase().includes(term)));
+                            tourneyMatches.forEach(t => {
+                                const div = document.createElement('div');
+                                div.textContent = `Tournament: ${t.name}`;
+                                div.addEventListener('click', () => {
+                                    searchInput.value = t.name;
+                                    suggestions.innerHTML = '';
+                                    window.location.href = `search.html?term=${encodeURIComponent(t.name)}`;
+                                });
+                                suggestions.appendChild(div);
+                            });
+
                         }
                         filterContent(term);
                     });

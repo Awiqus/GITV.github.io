@@ -16,6 +16,11 @@
                     <a class="nav-link" href="news.html">News</a>
                     <a class="nav-link" href="players.html">Players Profiles</a>
                 </div>
+                <form class="d-flex ms-auto" style="position: relative;" onsubmit="handleGlobalSearch(event)">
+                    <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search...">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                    <div id="suggestions" class="suggestions"></div>
+                </form>
             </div>    
         </nav>
         <div class="container">
@@ -30,5 +35,80 @@
                 </div>
             </section>
         </div>
+        <script>
+            // Global search handler
+            function handleGlobalSearch(event) {
+                event.preventDefault();
+                const searchTerm = document.getElementById('globalSearch').value.trim();
+                if (searchTerm) {
+                    window.location.href = `search.html?term=${encodeURIComponent(searchTerm)}`;
+                }
+            }
+
+                    // Suggestions (same as in other pages)
+        const searchInput = document.getElementById('globalSearch');
+        const suggestions = document.getElementById('suggestions');
+
+        async function loadAllDataForSuggestions() {
+            const players = await fetch('players.json')
+                .then(res => res.json())
+                .then(data => data.players)
+                .catch(() => []);
+            const news = await fetch('news.json')
+                .then(res => res.json())
+                .catch(() => []);
+            const tournaments = await fetch('tournaments.json')
+                .then(res => res.json())
+                .catch(() => []);
+            return { players, news, tournaments };
+        }
+
+        searchInput.addEventListener('input', async () => {
+            const term = searchInput.value.toLowerCase();
+            suggestions.innerHTML = '';
+            if (term) {
+                const { players, news, tournaments } = await loadAllDataForSuggestions();
+
+                // Players
+                const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
+                playerMatches.forEach(p => {
+                    const div = document.createElement('div');
+                    div.textContent = `Player: ${p.alias} (${p.region})`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = p.alias;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(p.alias)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // News
+                const newsMatches = news.filter(n => n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term));
+                newsMatches.forEach(n => {
+                    const div = document.createElement('div');
+                    div.textContent = `News: ${n.title}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = n.title;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(n.title)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // Tournaments
+                const tourneyMatches = tournaments.filter(t => t.name.toLowerCase().includes(term) || (t.winner && t.winner.toLowerCase().includes(term)));
+                tourneyMatches.forEach(t => {
+                    const div = document.createElement('div');
+                    div.textContent = `Tournament: ${t.name}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = t.name;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(t.name)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+            }
+        });
+        </script>
     </body>
 </html>

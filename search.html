@@ -17,7 +17,7 @@
                 <a class="nav-link" href="news.html">News</a>
                 <a class="nav-link" href="players.html">Players Profiles</a>
             </div>
-            <form class="d-flex ms-auto" style="position: relative;">
+            <form class="d-flex ms-auto" style="position: relative;" onsubmit="handleGlobalSearch(event)">
                 <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search...">
                 <button class="btn btn-outline-light" type="submit">Search</button>
                 <div id="suggestions" class="suggestions"></div>
@@ -26,58 +26,174 @@
     </nav>
     <div class="container">
         <h1 class="text-center mt-4">Search Results</h1>
-        <div id="searchResults"></div>
+        <div id="searchResults" class="mt-4"></div>
     </div>
     <script>
-        const search = document.getElementById('globalSearch');
-        const suggestions = document.getElementById('suggestions');
-        const results = document.getElementById('searchResults');
+        // Global search handler (same as in other pages)
+        function handleGlobalSearch(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById('globalSearch').value.trim();
+            if (searchTerm) {
+                window.location.href = `search.html?term=${encodeURIComponent(searchTerm)}`;
+            }
+        }
 
-        async function loadAllData() {
-            const players = await fetch('players.json').then(res => res.json()).then(data => data.players).catch(() => []);
-            const news = await fetch('news.json').then(res => res.json()).catch(() => []);
-            const tournaments = await fetch('tournaments.json').then(res => res.json()).catch(() => []);
+        // Suggestions (same as in other pages)
+        const searchInput = document.getElementById('globalSearch');
+        const suggestions = document.getElementById('suggestions');
+
+        async function loadAllDataForSuggestions() {
+            const players = await fetch('players.json')
+                .then(res => res.json())
+                .then(data => data.players)
+                .catch(() => []);
+            const news = await fetch('news.json')
+                .then(res => res.json())
+                .catch(() => []);
+            const tournaments = await fetch('tournaments.json')
+                .then(res => res.json())
+                .catch(() => []);
             return { players, news, tournaments };
         }
 
-        search.addEventListener('input', async () => {
-            const term = search.value.toLowerCase();
+        searchInput.addEventListener('input', async () => {
+            const term = searchInput.value.toLowerCase();
             suggestions.innerHTML = '';
+            if (term) {
+                const { players, news, tournaments } = await loadAllDataForSuggestions();
+
+                // Players
+                const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
+                playerMatches.forEach(p => {
+                    const div = document.createElement('div');
+                    div.textContent = `Player: ${p.alias} (${p.region})`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = p.alias;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(p.alias)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // News
+                const newsMatches = news.filter(n => n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term));
+                newsMatches.forEach(n => {
+                    const div = document.createElement('div');
+                    div.textContent = `News: ${n.title}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = n.title;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(n.title)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // Tournaments
+                const tourneyMatches = tournaments.filter(t => t.name.toLowerCase().includes(term) || (t.winner && t.winner.toLowerCase().includes(term)));
+                tourneyMatches.forEach(t => {
+                    const div = document.createElement('div');
+                    div.textContent = `Tournament: ${t.name}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = t.name;
+                        suggestions.innerHTML = '';
+                        window.location.href = `search.html?term=${encodeURIComponent(t.name)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+            }
+        });
+
+        // Display search results
+        async function loadAllData() {
+            const players = await fetch('players.json')
+                .then(res => res.json())
+                .then(data => data.players)
+                .catch(() => []);
+            const news = await fetch('news.json')
+                .then(res => res.json())
+                .catch(() => []);
+            const tournaments = await fetch('tournaments.json')
+                .then(res => res.json())
+                .catch(() => []);
+            return { players, news, tournaments };
+        }
+
+        async function displaySearchResults() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const term = urlParams.get('term')?.toLowerCase() || '';
+            searchInput.value = term; // Populate the search bar with the term
+            const results = document.getElementById('searchResults');
             results.innerHTML = '';
+
+            if (!term) {
+                results.innerHTML = '<p class="text-center">Please enter a search term.</p>';
+                return;
+            }
 
             const { players, news, tournaments } = await loadAllData();
 
             // Players
             const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
-            playerMatches.forEach(p => {
-                const div = document.createElement('div');
-                div.textContent = `Player: ${p.alias} (${p.region})`;
-                div.addEventListener('click', () => {
-                    window.location.href = `player.html?alias=${p.alias}`;
+            if (playerMatches.length > 0) {
+                const playerSection = document.createElement('div');
+                playerSection.innerHTML = '<h3>Players</h3>';
+                playerMatches.forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-2';
+                    const link = document.createElement('a');
+                    link.href = `player.html?alias=${p.alias}`;
+                    link.className = 'player-card-link';
+                    link.textContent = `${p.alias} (${p.region})`;
+                    div.appendChild(link);
+                    playerSection.appendChild(div);
                 });
-                results.appendChild(div);
-            });
-
-            // News (placeholder)
-            const newsMatches = news.filter(n => n.title?.toLowerCase().includes(term));
-            newsMatches.forEach(n => {
-                const div = document.createElement('div');
-                div.textContent = `News: ${n.title}`;
-                results.appendChild(div);
-            });
-
-            // Tournaments (placeholder)
-            const tourneyMatches = tournaments.filter(t => t.name?.toLowerCase().includes(term));
-            tourneyMatches.forEach(t => {
-                const div = document.createElement('div');
-                div.textContent = `Tournament: ${t.name}`;
-                results.appendChild(div);
-            });
-
-            if (!playerMatches.length && !newsMatches.length && !tourneyMatches.length) {
-                results.innerHTML = '<p>No results found.</p>';
+                results.appendChild(playerSection);
             }
-        });
+
+            // News
+            const newsMatches = news.filter(n => n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term));
+            if (newsMatches.length > 0) {
+                const newsSection = document.createElement('div');
+                newsSection.innerHTML = '<h3>News</h3>';
+                newsMatches.forEach(n => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-2';
+                    const link = document.createElement('a');
+                    link.href = `news.html#news-${n.id}`; // Assumes news.html will have sections with IDs
+                    link.className = 'player-card-link';
+                    link.textContent = n.title;
+                    div.appendChild(link);
+                    newsSection.appendChild(div);
+                });
+                results.appendChild(newsSection);
+            }
+
+            // Tournaments
+            const tourneyMatches = tournaments.filter(t => t.name.toLowerCase().includes(term) || (t.winner && t.winner.toLowerCase().includes(term)));
+            if (tourneyMatches.length > 0) {
+                const tourneySection = document.createElement('div');
+                tourneySection.innerHTML = '<h3>Tournaments</h3>';
+                tourneyMatches.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-2';
+                    const link = document.createElement('a');
+                    link.href = `tournaments.html#tournament-${t.id}`; // Assumes tournaments.html will have sections with IDs
+                    link.className = 'player-card-link';
+                    link.textContent = t.name;
+                    div.appendChild(link);
+                    tourneySection.appendChild(div);
+                });
+                results.appendChild(tourneySection);
+            }
+
+            // No Results
+            if (playerMatches.length === 0 && newsMatches.length === 0 && tourneyMatches.length === 0) {
+                results.innerHTML = '<p class="text-center">No results found.</p>';
+            }
+        }
+
+        // Run search on page load
+        displaySearchResults();
     </script>
 </body>
 </html>
