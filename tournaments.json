@@ -2,15 +2,21 @@
     {
         "id": 1,
         "name": "Abyss Cup 2024",
-        "winner": "DzeN",
         "date": "2024-03-01",
-        "participants": ["DzeN", "spartanch1ck", "Peudan"]
+        "results": [
+            { "player": "DzeN", "place": "1st", "prize": 5000 },
+            { "player": "spartanch1ck", "place": "2nd", "prize": 2000 },
+            { "player": "Peudan", "place": "3rd", "prize": 1000 }
+        ]
     },
     {
         "id": 2,
         "name": "Spring Spiral 2024",
-        "winner": "spartanch1ck",
         "date": "2024-03-15",
-        "participants": ["DzeN", "spartanch1ck", "Peudan"]
+        "results": [
+            { "player": "spartanch1ck", "place": "1st", "prize": 6000 },
+            { "player": "DzeN", "place": "2nd", "prize": 2500 },
+            { "player": "Peudan", "place": "3rd", "prize": 1200 }
+        ]
     }
 ]
