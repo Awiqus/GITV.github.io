@@ -39,6 +39,9 @@ body {
     background-color: #3a2155;
     color: #ddd;
 }
+.suggestions.active {
+    display: block; /* Show when active class is added */
+}
 #globalSearch:focus + .suggestions,
 .suggestions:hover {
     display: block; /* Show when focused or hovered */
@@ -50,9 +53,6 @@ body {
 }
 #globalSearch::placeholder {
     color: #ccc;
-}
-#globalSearch:not(:placeholder-shown) + .suggestions {
-    display: block;
 }
 .btn-outline-light {
     border-color: #3a2155;

@@ -173,8 +173,11 @@
         search.addEventListener('input', async () => {
             const term = search.value.toLowerCase();
             suggestions.innerHTML = '';
+            suggestions.classList.remove('active'); // Hide by default
+
             if (term) {
                 const { players, news, tournaments } = await loadAllDataForSuggestions();
+                let hasSuggestions = false;
 
                 // Players
                 const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
@@ -221,6 +224,9 @@
                     div.textContent = 'No suggestions found';
                     div.style.cursor = 'default';
                     suggestions.appendChild(div);
+                    suggestions.classList.add('active');
+                } else {
+                    suggestions.classList.add('active');
                 }
             }
         });

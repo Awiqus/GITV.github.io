@@ -1,16 +1,16 @@
 [
     {
         "id": 1,
-        "title": "Mark Wins Abyss Cup 2024!",
-        "date": "2024-12-15",
-        "content": "Mark dominated the Abyss Cup 2024, securing first place with an impressive Pyro team.",
-        "image": "https://via.placeholder.com/150"
+        "title": "DzeN Wins Abyss Cup 2024!",
+        "content": "DzeN dominated the Abyss Cup 2024 with an incredible performance.",
+        "image": "https://via.placeholder.com/300",
+        "date": "2024-03-01"
     },
     {
         "id": 2,
-        "title": "New Tournament Announced: Spiral League",
-        "date": "2025-01-10",
-        "content": "The Spiral League will kick off in March 2025, featuring top players from EU and NA.",
-        "image": "https://via.placeholder.com/150"
+        "title": "New Abyss Cycle Starts Soon",
+        "content": "The next Abyss cycle begins on March 15th — get ready!",
+        "image": "https://via.placeholder.com/300",
+        "date": "2024-03-10"
     }
 ]
