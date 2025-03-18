@@ -87,15 +87,15 @@ body {
 }
 .player-card-link:hover .card {
     transform: translateY(-5px);
-    box-shadow: 0 4px 15px #4a2c6d;
+    box-shadow: 0 4px 15px #F5D2B8;
 }
 .player-header {
-    background: linear-gradient(135deg, #2a1a3e 0%, #1a1a2e 100%);
+    background: linear-gradient(135deg, #3a2155 0%, #2a1a3e 100%);
     min-height: 200px;
     position: relative;
     overflow: hidden;
-    border-radius: 50px;
-    max-width: 1300px; /* Slightly larger than player-container to account for padding */
+    border-radius: 20px;
+    max-width: 67.7%; /* Slightly larger than player-container to account for padding */
     margin-left: auto; /* Center the header */
     margin-right: auto; /* Center the header */
 }
@@ -113,6 +113,7 @@ body {
     margin-right: auto;
     padding-left: 20px;
     padding-right: 20px;
+    position: relative;
 }
 .player-header .container {
     position: relative;
@@ -131,12 +132,15 @@ body {
     font-size: 1.1rem;
 }
 .player-info {
-    padding-left: 20px;
+    padding-left: 24px;
     overflow-wrap: break-word;
 }
 .player-header .social-links {
     margin-top: 10px;
 }
+/* #playerPrize {
+    color: #d4a017 !important;  
+} */
 .tab-nav {
     display: flex;
     gap: 20px;
@@ -154,7 +158,8 @@ body {
     background-color: #2a1a3e; /* Apply tournament bar color */
 }
 .tab-btn:hover {
-    color: #fff;
+    color: #F5D2B8; /* Teal for hover */
+    background-color: #2a1a3e; /* Keep base color, add teal text */
 }
 .tab-btn.active {
     color: #fff;
@@ -227,7 +232,7 @@ th.descending::after { content: ' ↓'; }
     fill: none;
 }
 .social-btn:hover svg .s1 {
-    fill: #3a2155;
+    fill: #F5D2B8;
 }
 .social-btn {
     width: 32px;
@@ -244,9 +249,9 @@ th.descending::after { content: ' ↓'; }
     z-index: 5;
 }
 .social-btn:hover {
-    background-color: #3a2155;
+    background-color: #F5D2B8; /* Teal for social link hover */
     transform: scale(1.1);
-    color: #ddd !important;
+    color: #fff !important;
 }
 .social-btn i {
     font-size: 16px;
@@ -273,4 +278,8 @@ th.descending::after { content: ' ↓'; }
 }
 .search-result-item a:hover {
     color: #ddd;
+}
+.achievement-badge .badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
 }
