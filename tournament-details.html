@@ -239,6 +239,11 @@
                     const bracketContainer = document.createElement('div');
                     bracketContainer.className = 'bracket-container';
 
+                    // Add SVG for connector lines
+                    const svg = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'svg');
+                    svg.className = 'bracket-connectors';
+                    bracketContainer.appendChild(svg);
+
                     // Filter out the 3rd place match
                     const mainBracketRounds = tournament.playoffBracket.filter(round => {
                         const roundName = round.name.toLowerCase().trim();
@@ -333,9 +338,89 @@
                         bracketContainer.appendChild(roundDiv);
 
                     });
+
                     playoffDiv.appendChild(bracketContainer);
 
+                    // Draw connector lines using SVG
+                    const drawConnectors = () => {
+                        const svgElement = bracketContainer.querySelector('.bracket-connectors');
+                        svgElement.innerHTML = ''; // Clear previous lines
 
+                        const rounds = bracketContainer.querySelectorAll('.bracket-round');
+                        const containerRect = bracketContainer.getBoundingClientRect();
+
+                        // Set SVG dimensions
+                        svgElement.setAttribute('width', containerRect.width);
+                        svgElement.setAttribute('height', containerRect.height);
+                        svgElement.style.position = 'absolute';
+                        svgElement.style.top = '0';
+                        svgElement.style.left = '0';
+                        svgElement.style.pointerEvents = 'none';
+
+                        // Connect 1/4 to Semifinals
+                        const quarterMatches = rounds[0].querySelectorAll('.bracket-match');
+                        const semiMatches = rounds[1].querySelectorAll('.bracket-match');
+
+                        quarterMatches.forEach((quarterMatch, qIndex) => {
+                            const semiMatch = semiMatches[qIndex];
+                            if (!semiMatch) return;
+
+                            const quarterRect = quarterMatch.getBoundingClientRect();
+                            const semiRect = semiMatch.getBoundingClientRect();
+
+                            const startX = quarterRect.right - containerRect.left;
+                            const startY = quarterRect.top + quarterRect.height / 2 - containerRect.top;
+                            const endX = semiRect.left - containerRect.left;
+                            const endY = semiRect.top + semiRect.height / 2 - containerRect.top;
+
+                            const midX = (startX + endX) / 2;
+
+                            const path = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'path');
+                            path.setAttribute('d', `
+                                M ${startX},${startY}
+                                H ${midX}
+                                V ${endY}
+                                H ${endX}
+                            `);
+                            path.setAttribute('stroke', '#3a3a5a');
+                            path.setAttribute('stroke-width', '2');
+                            path.setAttribute('fill', 'none');
+                            svgElement.appendChild(path);
+                        });
+
+                        // Connect Semifinals to Final
+                        const finalMatches = rounds[2].querySelectorAll('.bracket-match:not(.third-place-match)');
+                        const finalMatch = finalMatches[0]; // Only the Final match, not 3rd Place
+                        if (finalMatch) {
+                            semiMatches.forEach(semiMatch => {
+                                const semiRect = semiMatch.getBoundingClientRect();
+                                const finalRect = finalMatch.getBoundingClientRect();
+
+                                const startX = semiRect.right - containerRect.left;
+                                const startY = semiRect.top + semiRect.height / 2 - containerRect.top;
+                                const endX = finalRect.left - containerRect.left;
+                                const endY = finalRect.top + finalRect.height / 2 - containerRect.top;
+
+                                const midX = (startX + endX) / 2;
+
+                                const path = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'path');
+                                path.setAttribute('d', `
+                                    M ${startX},${startY}
+                                    H ${midX}
+                                    V ${endY}
+                                    H ${endX}
+                                `);
+                                path.setAttribute('stroke', '#3a3a5a');
+                                path.setAttribute('stroke-width', '2');
+                                path.setAttribute('fill', 'none');
+                                svgElement.appendChild(path);
+                            });
+                        }
+                    };
+
+                    // Draw connectors initially and on window resize
+                    drawConnectors();
+                    window.addEventListener('resize', drawConnectors);
                     
                 } else {
                     playoffDiv.innerHTML = '<p>No playoff bracket available.</p>';

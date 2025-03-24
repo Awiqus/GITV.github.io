@@ -144,7 +144,7 @@ h1, h2, h3 {
     padding: 20px 0;
     position: relative;
     width: 100%;
-    min-height: 400px; /* Increase height to accommodate pyramid structure */
+    min-height: 500px; /* Increase height to accommodate pyramid structure */
 }
 .bracket-round {
     display: flex;
@@ -169,6 +169,7 @@ h1, h2, h3 {
     width: 200px; 
     text-align: left;
     position: relative;
+    z-index: 1; /* Ensure connectors are behind matches */
 }
 
 .bracket-match:hover {
@@ -214,13 +215,22 @@ h1, h2, h3 {
 
 /* Pyramid Structure */
 .bracket-round[data-round="0"] {
-    justify-content: space-around; /* Spread out matches in the first round */
+    justify-content: space-between; /* Spread out matches in the first round */
     height: 100%; /* Full height for pyramid effect */
+    padding: 20px 0; /* Add padding to spread matches */
+}
+
+.bracket-round[data-round="0"] .bracket-match:nth-child(1) {
+    margin-top: 0; /* First match at the top */
+}
+
+.bracket-round[data-round="0"] .bracket-match:nth-child(2) {
+    margin-bottom: 0; /* Second match at the bottom */
 }
 
 .bracket-round[data-round="1"] {
-    justify-content: space-around; /* Slightly less spread for semifinals */
-    height: 80%; /* Reduce height for pyramid effect */
+    justify-content: center; /* Slightly less spread for semifinals */
+    height: 50%; /* Reduce height for pyramid effect */
     margin-top: 40px; /* Offset to center vertically */
 }
 
@@ -231,63 +241,14 @@ h1, h2, h3 {
 
 /* 3rd Place Match */
 .bracket-match.third-place-match {
-    border: 2px solid #cd7f32; /* Bronze border for 3rd place */
+    border: 2px; /* Bronze border for 3rd place */
 }
 
 /* Connector lines */
+.bracket-match::before,
 .bracket-match::after {
-    content: '';
-    position: absolute;
-    width: 30px; /* Longer horizontal line */
-    height: 2px;
-    background: #3a3a5a;
-    right: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.bracket-match::before {
-    content: '';
-    position: absolute;
-    width: 2px;
-    background: #3a3a5a;
-    right: -15px; /* Center of the horizontal line */
-}
-
-/* First round to second round connectors */
-.bracket-round[data-round="0"] .bracket-match:nth-child(1)::before {
-    height: 50%; /* Connect to the first semifinal match */
-    top: 50%;
-}
-
-.bracket-round[data-round="0"] .bracket-match:nth-child(2)::before {
-    height: 50%; /* Connect to the second semifinal match */
-    top: 0;
-}
-
-/* Second round to final connectors */
-.bracket-round[data-round="1"] .bracket-match:nth-child(1)::before {
-    height: 40px; /* Connect to the final match */
-    top: 50%;
-}
-
-.bracket-round[data-round="1"] .bracket-match:nth-child(2)::before {
-    height: 40px; /* Connect to the final match */
-    top: 0;
-}
-
-/* Remove connectors for the final round and 3rd place match */
-.bracket-round[data-round="2"] .bracket-match::after,
-.bracket-round[data-round="2"] .bracket-match::before {
     display: none;
 }
-
-.bracket-match.third-place-match::before,
-.bracket-match.third-place-match::after {
-    display: none;
-}
-
-
 
 /* Group Items */
 .group-item {
