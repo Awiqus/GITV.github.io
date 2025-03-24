@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
         <div class="container">
             <a class="navbar-brand" href="home.html">GITV</a>
-            <div class="navbar-nav">                    
+            <div class="navbar-nav">
                 <a class="nav-link" href="home.html">Home</a>
                 <a class="nav-link" href="index.html">Stats</a>
                 <a class="nav-link" href="tournaments.html">Tournaments</a>
@@ -27,34 +27,36 @@
                 </button>
                 <div id="suggestions" class="suggestions"></div>
             </form>
-        </div>    
+        </div>
     </nav>
-    <div class="player-header bg-dark position-relative mt-5">
-        <div class="player-container py-4">
-            <div class="social-links position-absolute top-0 end-0 mt-3 me-3" id="socialLinks" style="z-index: 10;"></div>
-            <div class="row align-items-center">
-                <div class="col-md-3 text-center ps-0 pe-2">
-                    <img id="playerAvatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Player Alias" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #4a2c6d;">
-                </div>
-                <div class="col-12 col-md-9 player-info ps-4">
-                    <h1 id="playerAlias" class="mb-2"></h1>
-                    <h4 id="playerName" class="player-subtext mb-2"></h4>
-                    <p id="playerRegion" class="player-subtext mb-1"></p>
-                    <p id="playerAge" class="player-subtext mb-1"></p>
-                    <p id="playerPrize" class="player-subtext mb-3"></p>
-                    <div class="achievement-badge mb-3" id="achievements"></div> <!-- New badge -->
+    <div class="container mt-5">
+        <div class="player-header bg-dark position-relative">
+            <div class="player-container py-4">
+                <div class="social-links position-absolute top-0 end-0 mt-3 me-3" id="socialLinks" style="z-index: 10;"></div>
+                <div class="row">
+                    <div class="col-md-3 text-center ps-0">
+                        <img id="playerAvatar" src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Player Alias" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #4a2c6d;">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="player-info">
+                            <h1 id="playerAlias" class="mb-2"></h1>
+                            <h4 id="playerName" class="player-subtext mb-2"></h4>
+                            <p id="playerRegion" class="player-subtext mb-1"></p>
+                            <p id="playerAge" class="player-subtext mb-1"></p>
+                            <p id="playerPrize" class="player-subtext mb-3"></p>
+                        </div>
+                        <div class="achievement-row" id="achievements"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container mt-5">
         <div class="tab-nav">
             <button class="tab-btn active" onclick="showSection('tournaments')">Tournaments</button>
             <button class="tab-btn" onclick="showSection('matches')">Matches</button>
             <button class="tab-btn" onclick="showSection('news')">News</button>
             <button class="tab-btn" onclick="showSection('stats')">Stats</button>
         </div>
-        <div id="tournamentsSection" class="tab-content active">
+        <div class="tab-content active" id="tournamentsSection">
             <h2>Tournament History</h2>
             <div id="tournamentHistory" class="mt-3"></div>
             <div id="recentActivity" class="mt-4">
@@ -62,21 +64,17 @@
                 <p>Latest result: Abyss Cup 2024 - 1st Place ($5000)</p>
             </div>
         </div>
-        <div id="matchesSection" class="tab-content">
+        <div class="tab-content" id="matchesSection">
             <h2>Match History</h2>
             <p>Match history coming soon...</p>
         </div>
-        <div id="newsSection" class="tab-content">
+        <div class="tab-content" id="newsSection">
             <h2>Related News</h2>
             <p>News related to this player coming soon...</p>
         </div>
-        <div id="statsSection" class="tab-content">
+        <div class="tab-content" id="statsSection">
             <h2>Player Stats</h2>
             <p>Stats coming soon...</p>
-        </div>
-        <div id="bioSection" class="mt-5">
-            <h2>About</h2>
-            <p>Bio coming soon...</p>
         </div>
     </div>
     <script>
@@ -202,102 +200,105 @@
             sections.forEach(s => s.classList.remove('active'));
             buttons.forEach(b => b.classList.remove('active'));
             document.getElementById(`${section}Section`).classList.add('active');
-            document.querySelector(`[onclick="showSection('${section}')"]`).classList.add('active');
+            document.querySelector(`[data-tab="${section}"]`).classList.add('active');
         }
 
         // Load player profile
         async function loadPlayerProfile() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const alias = urlParams.get('alias');
-                if (!alias) {
-                    document.getElementById('playerAlias').textContent = 'Error: No Player Specified';
+            const urlParams = new URLSearchParams(window.location.search);
+            const alias = urlParams.get('alias');
+            if (!alias) {
+                document.getElementById('playerAlias').textContent = 'Error: No Player Specified';
+                return;
+            }
+
+            try {
+                const playerResponse = await fetch('players.json');
+                const playerData = await playerResponse.json();
+                const player = playerData.players.find(p => p.alias.toLowerCase() === alias.toLowerCase());
+
+                if (!player) {
+                    document.getElementById('playerAlias').textContent = 'Player Not Found';
                     return;
                 }
 
-                try {
-                    const playerResponse = await fetch('players.json');
-                    const playerData = await playerResponse.json();
-                    const player = playerData.players.find(p => p.alias.toLowerCase() === alias.toLowerCase());
+                document.getElementById('playerAlias').textContent = player.alias;
+                document.getElementById('playerAvatar').src = player.avatar || 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+                document.getElementById('playerAvatar').alt = player.alias;
+                document.getElementById('playerName').textContent = player.name || 'Unknown';
+                document.getElementById('playerRegion').textContent = `Region: ${player.region || 'Unknown'}`;
+                document.getElementById('playerAge').textContent = `Age: ${player.age || 'N/A'}`;
+                document.getElementById('playerPrize').textContent = `Prize Money: $${player.prizeMoney || 0}`;
 
-                    if (!player) {
-                        document.getElementById('playerAlias').textContent = 'Player Not Found';
-                        return;
-                    }
-
-                    document.getElementById('playerAlias').textContent = player.alias;
-                    document.getElementById('playerAvatar').src = player.avatar || 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
-                    document.getElementById('playerAvatar').alt = player.alias;
-                    document.getElementById('playerName').textContent = player.name || 'Unknown';
-                    document.getElementById('playerRegion').textContent = `Region: ${player.region || 'Unknown'}`;
-                    document.getElementById('playerAge').textContent = `Age: ${player.age || 'N/A'}`;
-                    document.getElementById('playerPrize').textContent = `Prize Money: $${player.prizeMoney || 0}`;
-
-                    const socialLinks = document.getElementById('socialLinks');
-                    Object.keys(player.links).forEach(platform => {
-                        if (player.links[platform]) {
-                            const socialLink = document.createElement('a');
-                            const url = `${linkUrls[platform]}${player.links[platform]}`;
-                            socialLink.href = url;
-                            socialLink.target = '_blank';
-                            socialLink.className = 'btn btn-outline-light social-btn me-2';
-                            if (platform === 'akasha') {
-                                socialLink.innerHTML = `<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="20" height="20"><title>akashaBW</title><style>.s0 { fill: #ffffff }.s1 { fill: #212529 }</style><g id="Background"><path id="Path 1" class="s0" d="m7.2 6.6c0.1 3.2-0.6 6.4-2 9.2-1.2 2.3-2.2 4.4-2.2 4.7 0 0.3 2.1 0.4 4.8 0.3 3.5-0.1 5.7 0.5 8.7 2.4l4 2.5c0.8-7.9 2-12.1 3.3-14.4l2.2-4.3c-8.1 0.1-10.9-0.7-14.2-2.6l-4.7-2.7z"/><path id="Path 2" class="s1" d="m9.3 8.2c0.2 2.6 0.7 3.4 2.5 3.6 1.6 0.1 2.2-0.3 2.2-1.7 0.1-1-1-2.6-2.4-3.5-2.5-1.6-2.5-1.6-2.3 1.6zm6.7 2c-0.8 0.7-1.3 2-1.2 3 0.2 1.5-0.2 1.6-1.8 0.8-1.1-0.6-2.2-1-2.5-1-0.3 0-1.5 1-2.6 2.3-1.1 1.2-1.9 2.5-1.9 3 0 0.4 1 0.7 2.2 0.7 1.3 0 3.1-0.8 4.1-1.8 1.5-1.4 1.8-1.4 1.7-0.2 0 0.8 0.9 2.3 2 3.3 1.1 0.9 2.2 1.7 2.5 1.7 0.3 0 0.5-0.9 0.5-2 0-1.1-0.5-2.9-1-4-0.8-1.6-0.7-2 0.5-2 0.8 0 1.9-0.9 2.5-2 0.5-1.1 1-2.2 1-2.5 0-0.3-1-0.5-2.3-0.5-1.3 0-2.9 0.5-3.7 1.2z"/></g></svg>`;
-                            } else {
-                                socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
-                            }
-                            socialLinks.appendChild(socialLink);
+                const socialLinks = document.getElementById('socialLinks');
+                Object.keys(player.links).forEach(platform => {
+                    if (player.links[platform]) {
+                        const socialLink = document.createElement('a');
+                        const url = `${linkUrls[platform]}${player.links[platform]}`;
+                        socialLink.href = url;
+                        socialLink.target = '_blank';
+                        socialLink.className = 'btn btn-outline-light social-btn me-2';
+                        if (platform === 'akasha') {
+                            socialLink.innerHTML = `<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="20" height="20"><title>akashaBW</title><style>.s0 { fill: #ffffff }.s1 { fill: #212529 }</style><g id="Background"><path id="Path 1" class="s0" d="m7.2 6.6c0.1 3.2-0.6 6.4-2 9.2-1.2 2.3-2.2 4.4-2.2 4.7 0 0.3 2.1 0.4 4.8 0.3 3.5-0.1 5.7 0.5 8.7 2.4l4 2.5c0.8-7.9 2-12.1 3.3-14.4l2.2-4.3c-8.1 0.1-10.9-0.7-14.2-2.6l-4.7-2.7z"/><path id="Path 2" class="s1" d="m9.3 8.2c0.2 2.6 0.7 3.4 2.5 3.6 1.6 0.1 2.2-0.3 2.2-1.7 0.1-1-1-2.6-2.4-3.5-2.5-1.6-2.5-1.6-2.3 1.6zm6.7 2c-0.8 0.7-1.3 2-1.2 3 0.2 1.5-0.2 1.6-1.8 0.8-1.1-0.6-2.2-1-2.5-1-0.3 0-1.5 1-2.6 2.3-1.1 1.2-1.9 2.5-1.9 3 0 0.4 1 0.7 2.2 0.7 1.3 0 3.1-0.8 4.1-1.8 1.5-1.4 1.8-1.4 1.7-0.2 0 0.8 0.9 2.3 2 3.3 1.1 0.9 2.2 1.7 2.5 1.7 0.3 0 0.5-0.9 0.5-2 0-1.1-0.5-2.9-1-4-0.8-1.6-0.7-2 0.5-2 0.8 0 1.9-0.9 2.5-2 0.5-1.1 1-2.2 1-2.5 0-0.3-1-0.5-2.3-0.5-1.3 0-2.9 0.5-3.7 1.2z"/></g></svg>`;
+                        } else {
+                            socialLink.innerHTML = `<i class="${linkIcons[platform]}"></i>`;
                         }
-                    });
+                        socialLinks.appendChild(socialLink);
+                    }
+                });
 
-                    const achievements = document.getElementById('achievements');
-                    achievements.innerHTML = `<span class="badge bg-warning text-dark">Top 10 Abyss</span>`; // Placeholder
-                } catch (error) {
-                    console.error('Error loading player profile:', error);
-                    document.getElementById('playerAlias').textContent = 'Error Loading Profile';
-                }
+                const achievements = document.getElementById('achievements');
+                achievements.innerHTML = `
+                    <span class="badge bg-secondary me-2">Top 5 2024</span>
+                    <span class="badge bg-secondary">Abyss Champion</span>
+                `;
+            } catch (error) {
+                console.error('Error loading player profile:', error);
+                document.getElementById('playerAlias').textContent = 'Error Loading Profile';
+            }
+        }
             
 
-                // Fetch tournament history
-                const tournamentResponse = await fetch('tournaments.json');
-                const tournaments = await tournamentResponse.json();
-                const tournamentHistory = document.getElementById('tournamentHistory');
+        // Fetch tournament history
+        const tournamentResponse = await fetch('tournaments.json');
+        const tournaments = await tournamentResponse.json();
+        const tournamentHistory = document.getElementById('tournamentHistory');
 
-                const playerTournaments = tournaments.filter(t => t.results && t.results.some(r => r.player === player.alias));
-                if (playerTournaments.length === 0) {
-                    tournamentHistory.innerHTML = '<p>No tournament history available.</p>';
-                } else {
-                    playerTournaments.forEach(tournament => {
-                        const result = tournament.results.find(r => r.player === player.alias);
-                        const tournamentDiv = document.createElement('a');
-                        tournamentDiv.href = `tournaments.html#tournament-${tournament.id}`;
-                        tournamentDiv.className = 'tournament-bar d-block text-decoration-none text-white p-3 mb-2 rounded';
-                        tournamentDiv.innerHTML = `
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-1">${tournament.name}</h5>
-                                    <p class="mb-0 player-subtext">${tournament.date || 'Unknown date'}</p>
-                                </div>
-                                <div class="text-end">
-                                    <p class="mb-0">Place: ${result.place || 'N/A'}</p>
-                                    <p class="mb-0">Prize: $${result.prize || 0}</p>
-                                </div>
-                            </div>
-                        `;
-                        tournamentHistory.appendChild(tournamentDiv);
-                    });
-                }
-
-                // Update recent activity (placeholder)
-                const recentActivity = document.getElementById('recentActivity');
-                if (playerTournaments.length > 0) {
-                    const latest = playerTournaments[0];
-                    const result = latest.results.find(r => r.player === player.alias);
-                    recentActivity.innerHTML = `
-                        <h3>Recent Activity</h3>
-                        <p>Latest result: ${latest.name} - ${result.place} Place ($${result.prize})</p>
-                    `;
-                }
+        const playerTournaments = tournaments.filter(t => t.results && t.results.some(r => r.player === player.alias));
+        if (playerTournaments.length === 0) {
+            tournamentHistory.innerHTML = '<p>No tournament history available.</p>';
+        } else {
+            playerTournaments.forEach(tournament => {
+                const result = tournament.results.find(r => r.player === player.alias);
+                const tournamentDiv = document.createElement('a');
+                tournamentDiv.href = `tournaments.html#tournament-${tournament.id}`;
+                tournamentDiv.className = 'tournament-bar d-block text-decoration-none text-white p-3 mb-2 rounded';
+                tournamentDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">${tournament.name}</h5>
+                            <p class="mb-0 player-subtext">${tournament.date || 'Unknown date'}</p>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-0">Place: ${result.place || 'N/A'}</p>
+                            <p class="mb-0">Prize: $${result.prize || 0}</p>
+                        </div>
+                    </div>
+                `;
+                tournamentHistory.appendChild(tournamentDiv);
+            });
         }
+
+            // Update recent activity (placeholder)
+            const recentActivity = document.getElementById('recentActivity');
+            if (playerTournaments.length > 0) {
+                const latest = playerTournaments[0];
+                const result = latest.results.find(r => r.player === player.alias);
+                recentActivity.innerHTML = `
+                    <h3>Recent Activity</h3>
+                    <p>Latest result: ${latest.name} - ${result.place} Place ($${result.prize})</p>
+                `;
+            }
 
         // Load the player profile on page load
         loadPlayerProfile();

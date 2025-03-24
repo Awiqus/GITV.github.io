@@ -1,226 +1,399 @@
+/* General Styles */
 body {
-    background-color: #1a1a2e; 
-    color: white;
-    margin: 0;
-    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a2e; /* Darkest purple for background */
+    color: #d3d3d3; /* Light text color */
 }
-.bg-custom {
-    background-color: #4a2c6d; 
+
+/* Navbar Custom Background */
+.navbar.bg-custom {
+    background-color: #3a2155; /* Dark purple for navbar */
 }
-.container {
-    padding: 20px;
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+    color: #ecf0f1;
+    transition: color 0.3s;
 }
-.mt-4 {
-    margin-top: 1.5rem;
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #9b59b6; /* Purple accent for hover/active */
 }
-.img-fluid {
-    max-width: 100%;
-}
+
+/* Search Suggestions */
 .suggestions {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: #1a1a2e;
-    border: 1px solid #3a2155;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
+    background-color: #3a2155; /* Dark purple for suggestions */
+    border: 1px solid #4a2f70;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     max-height: 200px;
     overflow-y: auto;
     z-index: 1000;
     display: none;
 }
-.suggestions div {
-    padding: 8px 12px;
-    color: #f8f9fa;
-    cursor: pointer;
-}
-.suggestions div:hover {
-    background-color: #3a2155;
-    color: #ddd;
-}
+
 .suggestions.active {
-    display: block; /* Show when active class is added */
-}
-#globalSearch:focus + .suggestions,
-.suggestions:hover {
-    display: block; /* Show when focused or hovered */
-}
-#globalSearch {
-    background: #3a2155;
-    color: white;
-    border: none;
-}
-#globalSearch::placeholder {
-    color: #ccc;
-}
-.btn-outline-light {
-    border-color: #3a2155;
-}
-.btn-outline-light:hover {
-    background: #3a2155;
-    color: white;
-}
-.navbar {
-    background-color: #4a2c6d;
-    color: white;
-    min-height: 60px;
-    padding: 0;
-}
-.navbar-brand {
-    padding-left: 15px;
-    margin-right: 20px;
-}
-.navbar-nav {
-    margin-left: auto;
-}
-.news-image {
-    max-height: 200px;
-    overflow: hidden;
-}
-.player-card-link {
-    text-decoration: none;
-    color: inherit;
-}
-.player-card-link .card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.player-card-link:hover .card {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px #F5D2B8;
-}
-.player-header {
-    background: linear-gradient(135deg, #3a2155 0%, #2a1a3e 100%);
-    min-height: 200px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px;
-    max-width: 67.7%; /* Slightly larger than player-container to account for padding */
-    margin-left: auto; /* Center the header */
-    margin-right: auto; /* Center the header */
-}
-.header-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-.player-container {
-    max-width: 1000px; 
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 20px;
-    padding-right: 20px;
-    position: relative;
-}
-.player-header .container {
-    position: relative;
-    z-index: 2;
-}
-.player-header h1 {
-    color: #fff;
-    font-weight: bold;
-    font-size: 2.5rem;
-}
-.player-header p {
-    color: #fff;
-}
-.player-subtext {
-    color: #fff; 
-    font-size: 1.1rem;
-}
-.player-info {
-    padding-left: 24px;
-    overflow-wrap: break-word;
-}
-.player-header .social-links {
-    margin-top: 10px;
-}
-/* #playerPrize {
-    color: #d4a017 !important;  
-} */
-.tab-nav {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-.tab-btn {
-    background: none;
-    border: none;
-    color: #ccc;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 5px 15px;
-    transition: color 0.2s ease, border-bottom 0.2s ease;
-    line-height: 1.5; /* Ensure consistent height */
-    background-color: #2a1a3e; /* Apply tournament bar color */
-}
-.tab-btn:hover {
-    color: #F5D2B8; /* Teal for hover */
-    background-color: #2a1a3e; /* Keep base color, add teal text */
-}
-.tab-btn.active {
-    color: #fff;
-    background-color: #3a2155; /* Replace underline with background */
-    border-radius: 4px;
-}
-.tab-content {
-    display: none;
-}
-.tab-content.active {
     display: block;
 }
-/* Tournament Bars */
-.tournament-bar {
-    background-color: #2a1a3e;
-    transition: background-color 0.2s ease;
-}
-.tournament-bar:hover {
-    background-color: #3a2155;
-}
-.tournament-bar h5 {
-    color: #fff;
-}
-.tournament-bar p {
-    color: #ccc; /* Lighter color for better visibility */
-}
-.card-subtitle {
-    font-weight: 300;
-    font-family: 'cursive', cursive;
-    font-style: italic;
-    color: #b0b0b0;
-}
-#rankBody tr {
-    transition: opacity 0.15s ease;
-}
-th {
-    position: relative;
+
+.suggestions div {
+    padding: 8px 12px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    color: #d3d3d3;
+    transition: background-color 0.2s;
 }
-th:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+
+.suggestions div:hover {
+    background-color: #4a2f70; /* Medium purple for hover */
 }
-.sort-arrow {
-    display: none;
+
+/* Tournament Card Styles (tournaments.html) */
+.tournament-card {
+    display: block;
+    background-color: #3a2155; /* Dark purple for cards */
+    transition: transform 0.2s;
+    color: #d3d3d3;
+}
+
+.tournament-card:hover {
+    transform: scale(1.02);
+}
+
+.tournament-image {
+    width: 150px;
+    height: 100px;
+}
+
+.tournament-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Tournament Details Image (tournament-details.html) */
+#tournamentImage {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center center;
+}
+
+/* Tab Container */
+.tab-container {
+    background-color: #3a2155; /* Dark purple background (unchanged) */
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom Tab Buttons */
+.nav-tabs {
+    border-bottom: none; /* Remove Bootstrap's default bottom border */
+}
+
+.nav-tabs .nav-item {
+    margin: 0; /* Remove default margin */
+}
+
+.nav-tabs .custom-tab {
+    background-color: #4a2f70; /* Medium purple for tabs (unchanged) */
+    color: #d3d3d3; /* Light gray text */
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    margin: 5px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.nav-tabs .custom-tab:hover {
+    background-color: #5a3f85; /* Lighter purple on hover (unchanged) */
+    color: #ffffff;
+}
+
+.nav-tabs .custom-tab.active {
+    background-color: #6a4f9a; /* Lightest purple for active tab (unchanged) */
+    color: #ffffff;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    background-color: #3a2155; /* Dark purple for content sections */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #ffffff;
+}
+
+/* Playoff Bracket */
+.bracket-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    position: relative;
+    overflow-x: auto; /* Allow horizontal scrolling if bracket overflows */
+    padding-bottom: 10px;
+}
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0 40px;
+    position: relative;
+    min-width: 200px; /* Ensure rounds don’t collapse */
+}
+
+.bracket-round h4 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.bracket-match {
+    background-color: #4a2f70;
+    padding: 10px;
+    margin: 20px 0; /* Increased margin for spacing */
+    border-radius: 4px;
+    text-align: center;
+    color: #d3d3d3;
+    transition: background-color 0.2s;
+    position: relative;
+    min-width: 180px; /* Ensure enough space for content */
+}
+
+.bracket-match:hover {
+    background-color: #5a3f85;
+}
+
+.bracket-player {
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #6a4f9a; /* Border around each player */
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.time-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.time-container span {
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.time-winner {
+    background-color: #2ecc71; /* Green for winner */
+    color: #ffffff;
+}
+
+.time-loser {
+    background-color: #e74c3c; /* Red for loser */
+    color: #ffffff;
+}
+
+.time-container.final-match {
+    border: 2px solid #ffd700; /* Gold border for final match */
+    padding: 5px;
+    border-radius: 4px;
+    background-color: rgba(255, 215, 0, 0.1); /* Slight gold tint */
+}
+
+/* Connector Lines */
+.bracket-match::after {
+    content: '';
     position: absolute;
-    right: 5px;
+    width: 20px;
+    height: 1px;
+    background-color: #6a4f9a;
+    right: -30px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 12px;
 }
-th:hover .sort-arrow {
-    display: inline;
+
+.bracket-match::before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    background-color: #6a4f9a;
+    right: -10px;
+    top: 0;
+    height: 100%;
 }
-th.sorted .sort-arrow {
-    display: inline;
+
+.bracket-round[data-round="0"] .bracket-match:nth-child(2)::before {
+    height: 50%;
+    top: 0;
 }
-th.ascending::after { content: ' ↑'; }
-th.descending::after { content: ' ↓'; }
-.card img {
-    object-fit: cover;
+
+.bracket-round:last-child .bracket-match::after,
+.bracket-round:last-child .bracket-match::before {
+    display: none; /* No connectors for the final round */
+}
+
+/* 3rd Place Match */
+.third-place-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.third-place-round {
+    margin: 0;
+}
+
+.third-place-match {
+    width: 180px;
+}
+
+.third-place-match::before,
+.third-place-match::after {
+    display: none; /* Remove connector lines for 3rd Place Match */
+}
+
+
+
+/* Group Items */
+.group-item {
+    background-color: #4a2f70; /* Medium purple */
+    color: #d3d3d3;
+    transition: background-color 0.2s;
+}
+
+.group-item:hover {
+    background-color: #5a3f85; /* Lighter purple for hover */
+}
+
+/* Placements Table */
+.table-custom {
+    background-color: #3a2155; /* Dark purple for table */
+    color: #d3d3d3;
+    border: none;
+}
+
+.table-custom thead th {
+    background-color: #50357a; /* Medium purple for table header */
+    color: #ffffff;
+    border: none;
+}
+
+.table-custom tbody tr {
+    background-color: #4a2f70; /* Medium purple for table rows */
+    transition: background-color 0.2s;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #5a3f85; /* Lighter purple for hover */
+}
+.table-custom tbody tr.row-alternate {
+    background-color: #4a2f70; /* Slightly darker purple for alternating rows */
+}
+
+.table-custom th,
+.table-custom td {
+    border: none;
+    padding: 10px;
+    background-color: #4a2c6d;
+    color: #ddd;
+}
+
+.table-custom .fa-medal.text-warning {
+    color: #ffd700; /* Gold (unchanged) */
+}
+
+.table-custom .fa-medal.text-secondary {
+    color: #c0c0c0; /* Silver (unchanged) */
+}
+
+.table-custom .fa-medal.text-bronze {
+    color: #cd7f32; /* Bronze (unchanged) */
+}
+
+/* Player Items */
+.player-item {
+    background-color: #4a2f70; /* Medium purple */
+    color: #f8f9fa;
+    transition: background-color 0.2s;
+}
+
+.player-item:hover {
+    background-color: #5a3f85; /* Lighter purple for hover */
+}
+
+.player-item a {
+    color: #9b59b6; /* Purple accent for links */
+    font-weight: 500;
+}
+
+/* Character Items */
+.character-item {
+    background-color: #4a2f70; /* Medium purple */
+    color: #d3d3d3;
+    transition: background-color 0.2s;
+}
+
+.character-item:hover {
+    background-color: #5a3f85; /* Lighter purple for hover */
+}
+
+/* Stats Content */
+#statsContent p {
+    background-color: #4a2f70; /* Medium purple */
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .tournament-image {
+        width: 100px;
+        height: 60px;
+    }
+
+    #tournamentImage {
+        height: 200px;
+    }
+
+    .bracket-round {
+        margin: 0 10px;
+    }
+
+    .bracket-match {
+        padding: 5px;
+        margin: 5px 0;
+    }
+
+    .nav-tabs .custom-tab {
+        padding: 8px 15px;
+        margin: 3px;
+        font-size: 14px;
+    }
+
+}
+
+/* Player.html profiles + links */
+.fa-brands {
+    color: #f8f9fa;
+}
+.social-btn i {
+    font-size: 16px;
+    display: inline-block;
 }
 .social-links {
     display: flex;
@@ -232,7 +405,7 @@ th.descending::after { content: ' ↓'; }
     fill: none;
 }
 .social-btn:hover svg .s1 {
-    fill: #F5D2B8;
+    fill: #4a2c6d;
 }
 .social-btn {
     width: 32px;
@@ -243,19 +416,14 @@ th.descending::after { content: ' ↓'; }
     justify-content: center;
     font-size: 16px;
     border-radius: 4px;
-    transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-    background-color: rgba(0, 0, 0, 0.3);
-    text-decoration: none !important; /* Ensure links work */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    background-color: #1a1a2e;
+    text-decoration: none !important;
     z-index: 5;
 }
 .social-btn:hover {
-    background-color: #F5D2B8; /* Teal for social link hover */
+    background-color: #4a2c6d; /* Teal for social link hover */
     transform: scale(1.1);
-    color: #fff !important;
-}
-.social-btn i {
-    font-size: 16px;
-    display: inline-block;
 }
 .social-btn svg {
     width: 20px;
@@ -264,22 +432,24 @@ th.descending::after { content: ' ↓'; }
 .social-btn i, .social-btn svg {
     pointer-events: none; /* Ensure clicks go to the link */
 }
-.search-result-item {
-    padding: 8px;
-    border-bottom: 1px solid #3a2155;
-    transition: background-color 0.2s ease;
+.container {
+    padding: 20px;
+    max-width: 1140px;
 }
-.search-result-item:hover {
-    background-color: #3a2155;
-    color: #ddd;
+.mt-5 {
+    margin-top: 3rem;
 }
-.search-result-item a {
-    color: #f8f9fa;
+.mt-4 {
+    margin-top: 1.5rem;
 }
-.search-result-item a:hover {
-    color: #ddd;
+.btn-outline-light {
+    border-color: #3a2155;
 }
-.achievement-badge .badge {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+.btn-outline-light:hover {
+    background: #3a2155;
+    color: white;
+}
+.player-card-link {
+    text-decoration: none;
+    color: inherit;
 }

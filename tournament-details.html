@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tournament Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">GITV</a>
+            <div class="navbar-nav">                    
+                <a class="nav-link" href="home.html">Home</a>
+                <a class="nav-link" href="index.html">Stats</a>
+                <a class="nav-link" href="tournaments.html">Tournaments</a>
+                <a class="nav-link" href="news.html">News</a>
+                <a class="nav-link" href="players.html">Players Profiles</a>
+            </div>
+            <form class="d-flex ms-auto" style="position: relative;" onsubmit="handleGlobalSearch(event)">
+                <input class="form-control me-2" type="search" id="globalSearch" placeholder="Search...">
+                <button class="btn btn-outline-light" type="submit">
+                    <i class="fas fa-magnifying-glass"></i>
+                </button>
+                <div id="suggestions" class="suggestions"></div>
+            </form>
+        </div>    
+    </nav>
+    <div class="container mt-4" id="tournamentDetails">
+        <img id="tournamentImage" class="img-fluid rounded mb-4" alt="Tournament Image">
+        <h1 id="tournamentName" class="text-center"></h1>
+        <div class="text-center mb-4">
+            <p id="tournamentDate" class="d-inline-block me-3"></p>
+            <p id="tournamentPrizePool" class="d-inline-block"></p>
+            <p id="tournamentWinner" class="d-inline-block ms-3"></p>
+        </div>
+        <div class="tab-container mb-4">
+            <ul class="nav nav-tabs" id="tournamentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link custom-tab active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link custom-tab" id="players-tab" data-bs-toggle="tab" data-bs-target="#players" type="button" role="tab" aria-controls="players" aria-selected="false">Players</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link custom-tab" id="characters-tab" data-bs-toggle="tab" data-bs-target="#characters" type="button" role="tab" aria-controls="characters" aria-selected="false">Characters</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link custom-tab" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="false">Stats</button>
+                </li>
+            </ul>
+        </div>    
+        <div class="tab-content" id="tournamentTabContent">
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                <div class="content-wrapper mb-4">
+                    <h2>Play-off Bracket</h2>
+                    <div id="playoffBracket" class="mt-3"></div>
+                </div>
+                <div class="content-wrapper mb-4">
+                    <h2>Group Stage</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Group A</h3>
+                            <div id="groupA" class="mt-3"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Group B</h3>
+                            <div id="groupB" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-wrapper mb-4">
+                    <h2>Final Placements</h2>
+                    <div id="placements" class="mt-3"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="players" role="tabpanel" aria-labelledby="players-tab">
+                <div class="content-wrapper mb-4">
+                    <h2>Players</h2>
+                    <div id="playersList" class="mt-3"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="characters" role="tabpanel" aria-labelledby="characters-tab">
+                <div class="content-wrapper mb-4">
+                    <h2>Characters</h2>
+                    <div id="charactersList" class="mt-3"></div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+                <div class="content-wrapper mb-4">
+                    <h2>Stats</h2>
+                    <div id="statsContent" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global search handler
+        function handleGlobalSearch(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById('globalSearch').value.trim();
+            if (searchTerm) {
+                window.location.href = `search.html?term=${encodeURIComponent(searchTerm)}`;
+            }
+        }
+
+        // Suggestions
+        const searchInput = document.getElementById('globalSearch');
+        const suggestions = document.getElementById('suggestions');
+
+        async function loadAllDataForSuggestions() {
+            try {
+                const players = await fetch('players.json')
+                    .then(res => res.json())
+                    .then(data => data.players)
+                    .catch(() => []);
+                const news = await fetch('news.json')
+                    .then(res => res.json())
+                    .catch(() => []);
+                const tournaments = await fetch('tournaments.json')
+                    .then(res => res.json())
+                    .catch(() => []);
+                return { players, news, tournaments };
+            } catch (error) {
+                console.error('Error loading data for suggestions:', error);
+                return { players: [], news: [], tournaments: [] };
+            }
+        }
+
+        searchInput.addEventListener('input', async () => {
+            const term = searchInput.value.toLowerCase();
+            suggestions.innerHTML = '';
+            suggestions.classList.remove('active');
+
+            if (term) {
+                const { players, news, tournaments } = await loadAllDataForSuggestions();
+                let hasSuggestions = false;
+
+                // Players
+                const playerMatches = players.filter(p => p.alias.toLowerCase().includes(term) || p.region.toLowerCase().includes(term));
+                playerMatches.forEach(p => {
+                    hasSuggestions = true;
+                    const div = document.createElement('div');
+                    div.textContent = `Player: ${p.alias} (${p.region})`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = p.alias;
+                        suggestions.innerHTML = '';
+                        suggestions.classList.remove('active');
+                        window.location.href = `search.html?term=${encodeURIComponent(p.alias)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // News
+                const newsMatches = news.filter(n => n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term));
+                newsMatches.forEach(n => {
+                    hasSuggestions = true;
+                    const div = document.createElement('div');
+                    div.textContent = `News: ${n.title}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = n.title;
+                        suggestions.innerHTML = '';
+                        suggestions.classList.remove('active');
+                        window.location.href = `search.html?term=${encodeURIComponent(n.title)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                // Tournaments
+                const tourneyMatches = tournaments.filter(t => t.name.toLowerCase().includes(term) || (t.winner && t.winner.toLowerCase().includes(term)));
+                tourneyMatches.forEach(t => {
+                    hasSuggestions = true;
+                    const div = document.createElement('div');
+                    div.textContent = `Tournament: ${t.name}`;
+                    div.addEventListener('click', () => {
+                        searchInput.value = t.name;
+                        suggestions.innerHTML = '';
+                        suggestions.classList.remove('active');
+                        window.location.href = `search.html?term=${encodeURIComponent(t.name)}`;
+                    });
+                    suggestions.appendChild(div);
+                });
+
+                if (!hasSuggestions) {
+                    const div = document.createElement('div');
+                    div.textContent = 'No suggestions found';
+                    div.style.cursor = 'default';
+                    suggestions.appendChild(div);
+                    suggestions.classList.add('active');
+                } else {
+                    suggestions.classList.add('active');
+                }
+            }
+        });
+
+        async function loadTournamentDetails() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const tournamentId = parseInt(urlParams.get('id'));
+                if (!tournamentId) {
+                    throw new Error('Tournament ID not provided in URL');
+                }
+
+                const response = await fetch('tournaments.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch tournaments.json: ${response.status} ${response.statusText}`);
+                }
+                const tournaments = await response.json();
+                const tournament = tournaments.find(t => t.id === tournamentId);
+                if (!tournament) {
+                    throw new Error(`Tournament with ID ${tournamentId} not found`);
+                }
+
+                // Set the tournament image with debug logging
+                const tournamentImage = document.getElementById('tournamentImage');
+                console.log('Tournament Image URL:', tournament.image);
+                tournamentImage.src = tournament.image || 'https://via.placeholder.com/1140x300';
+                tournamentImage.alt = tournament.name;
+
+                // Set tournament details
+                document.getElementById('tournamentName').textContent = tournament.name;
+                document.getElementById('tournamentDate').textContent = `Date: ${tournament.date || 'TBD'}`;
+                document.getElementById('tournamentPrizePool').textContent = `Prize Pool: $${tournament.prizePool || 0}`;
+                if (!tournament.winner) {
+                    const firstPlace = tournament.results.find(result => result.place === '1st');
+                    tournament.winner = firstPlace ? firstPlace.player : 'TBD';
+                }
+                document.getElementById('tournamentWinner').textContent = `Winner: ${tournament.winner}`;
+
+                // Populate Play-off Bracket (Dynamic Data)
+                const playoffDiv = document.getElementById('playoffBracket');
+                if (tournament.playoffBracket && tournament.playoffBracket.length > 0) {
+                    // Separate main bracket and 3rd Place Match
+                    const mainBracketRounds = tournament.playoffBracket.filter(round => round.name.toLowerCase() !== '3rd place match');
+                    const thirdPlaceRound = tournament.playoffBracket.find(round => round.name.toLowerCase() === '3rd place match');
+
+                    // Main Bracket (1/4, Semifinals, Final)
+                    const bracketContainer = document.createElement('div');
+                    bracketContainer.className = 'bracket-container';
+                    tournament.playoffBracket.forEach((round, roundIndex) => {
+                        const roundDiv = document.createElement('div');
+                        roundDiv.className = 'bracket-round';
+                        roundDiv.innerHTML = `<h4>${round.name}</h4>`;
+                        round.matches.forEach((match, matchIndex) => {
+                            const matchDiv = document.createElement('div');
+                            matchDiv.className = 'bracket-match';
+
+                            // Determine if this is the final match
+                            const isFinal = round.name.toLowerCase() === 'final';
+
+                            // Use times directly in seconds
+                            const player1Time = match.time.player1;
+                            const player2Time = match.time.player2;
+
+                            // Determine winner based on times (faster time wins)
+                            const player1Wins = parseInt(match.time.player1) < parseInt(match.time.player2);
+
+                            // Apply winner/loser classes for times
+                            const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
+                            const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
+
+                            // Add final match class if applicable
+                            const timeContainerClass = isFinal ? 'time-container final-match' : 'time-container';
+
+                            matchDiv.innerHTML = `
+                                <div class="bracket-player player1">${match.player1}</div>
+                                <div class="bracket-player player2">${match.player2}</div>
+                                <div class="${timeContainerClass}">
+                                    <span class="${player1TimeClass}">${match.player1}: ${player1Time}</span>
+                                    <span class="${player2TimeClass}">${match.player2}: ${player2Time}</span>
+                                </div>
+                            `;
+
+                            // Add data attributes for connector lines
+                            matchDiv.dataset.round = roundIndex;
+                            matchDiv.dataset.match = matchIndex;
+
+                            roundDiv.appendChild(matchDiv);
+                        });
+                        bracketContainer.appendChild(roundDiv);
+                    });
+                    playoffDiv.appendChild(bracketContainer);
+
+
+                    // 3rd Place Match (below the main bracket)
+                    if (thirdPlaceRound) {
+                        const thirdPlaceContainer = document.createElement('div');
+                        thirdPlaceContainer.className = 'third-place-container';
+                        const thirdPlaceRoundDiv = document.createElement('div');
+                        thirdPlaceRoundDiv.className = 'bracket-round third-place-round';
+                        thirdPlaceRoundDiv.innerHTML = `<h4>${thirdPlaceRound.name}</h4>`;
+                        thirdPlaceRound.matches.forEach(match => {
+                            const matchDiv = document.createElement('div');
+                            matchDiv.className = 'bracket-match third-place-match';
+                            
+                            // Use times directly in seconds
+                            const player1Time = match.time.player1;
+                            const player2Time = match.time.player2;
+                            
+                            // Determine winner based on times (faster time wins)
+                            const player1Wins = parseInt(match.time.player1) < parseInt(match.time.player2);
+                            
+                            // Apply winner/loser classes for times
+                            const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
+                            const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
+                            
+                            matchDiv.innerHTML = `
+                                <div class="bracket-player player1">${match.player1}</div>
+                                <div class="bracket-player player2">${match.player2}</div>
+                                <div class="time-container">
+                                    <span class="${player1TimeClass}">${player1Time}</span>
+                                    <span class="${player2TimeClass}">${player2Time}</span>
+                                </div>
+                            `;
+                            
+                            thirdPlaceRoundDiv.appendChild(matchDiv);
+                        });
+                        thirdPlaceContainer.appendChild(thirdPlaceRoundDiv);
+                        playoffDiv.appendChild(thirdPlaceContainer);
+                    }
+                } else {
+                    playoffDiv.innerHTML = '<p>No playoff bracket available.</p>';
+                }
+
+                // Populate Group A (Dynamic Data)
+                const groupADiv = document.getElementById('groupA');
+                if (tournament.groupStage && tournament.groupStage.groupA && tournament.groupStage.groupA.length > 0) {
+                    tournament.groupStage.groupA.forEach(player => {
+                        const groupItem = document.createElement('div');
+                        groupItem.className = 'group-item p-2 mb-2 rounded';
+                        groupItem.innerHTML = `
+                            <div class="d-flex justify-content-between">
+                                <span>${player.player}</span>
+                                <span>${player.wins}-${player.losses}</span>
+                            </div>
+                        `;
+                        groupADiv.appendChild(groupItem);
+                    });
+                } else {
+                    groupADiv.innerHTML = '<p>No Group A data available.</p>';
+                }
+
+                // Populate Group B (Dynamic Data)
+                const groupBDiv = document.getElementById('groupB');
+                if (tournament.groupStage && tournament.groupStage.groupB && tournament.groupStage.groupB.length > 0) {
+                    tournament.groupStage.groupB.forEach(player => {
+                        const groupItem = document.createElement('div');
+                        groupItem.className = 'group-item p-2 mb-2 rounded';
+                        groupItem.innerHTML = `
+                            <div class="d-flex justify-content-between">
+                                <span>${player.player}</span>
+                                <span>${player.wins}-${player.losses}</span>
+                            </div>
+                        `;
+                        groupBDiv.appendChild(groupItem);
+                    });
+                } else {
+                    groupBDiv.innerHTML = '<p>No Group B data available.</p>';
+                }
+
+                // Populate Placements Table
+                const placementsDiv = document.getElementById('placements');
+                if (tournament.results && tournament.results.length > 0) {
+                    const table = document.createElement('table');
+                    table.className = 'table table-custom';
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Place</th>
+                                <th>Player</th>
+                                <th>Medal</th>
+                                <th>Prize</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    `;
+                    const tbody = table.querySelector('tbody');
+                    tournament.results.forEach(result => {
+                        const medal = result.place === '1st' ? '<i class="fas fa-medal text-warning"></i>' : 
+                                     result.place === '2nd' ? '<i class="fas fa-medal text-secondary"></i>' : 
+                                     result.place === '3rd' ? '<i class="fas fa-medal text-bronze"></i>' : '';
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${result.place}</td>
+                            <td>${result.player}</td>
+                            <td>${medal}</td>
+                            <td>$${result.prize}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                    placementsDiv.appendChild(table);
+                } else {
+                    placementsDiv.innerHTML = '<p>No placements available.</p>';
+                }
+
+                // Populate Players Tab
+                const playersDiv = document.getElementById('playersList');
+                if (tournament.results && tournament.results.length > 0) {
+                    const uniquePlayers = [...new Set(tournament.results.map(result => result.player))];
+                    uniquePlayers.forEach(player => {
+                        const playerItem = document.createElement('div');
+                        playerItem.className = 'player-item p-2 mb-2 rounded';
+                        playerItem.innerHTML = `
+                            <a href="player.html?alias=${player}" class="text-decoration-none">${player}</a>
+                        `;
+                        playersDiv.appendChild(playerItem);
+                    });
+                } else {
+                    playersDiv.innerHTML = '<p>No players available.</p>';
+                }
+
+                // Populate Characters Tab (Placeholder for now)
+                const charactersDiv = document.getElementById('charactersList');
+                const genshinCharacters = [
+                    { name: 'Diluc', element: 'Pyro' },
+                    { name: 'Keqing', element: 'Electro' },
+                    { name: 'Mona', element: 'Hydro' },
+                    { name: 'Venti', element: 'Anemo' },
+                    { name: 'Ganyu', element: 'Cryo' },
+                    { name: 'Zhongli', element: 'Geo' },
+                    { name: 'Hu Tao', element: 'Pyro' },
+                    { name: 'Raiden Shogun', element: 'Electro' }
+                ];
+                genshinCharacters.forEach(character => {
+                    const characterItem = document.createElement('div');
+                    characterItem.className = 'character-item p-2 mb-2 rounded';
+                    characterItem.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <span>${character.name}</span>
+                            <span>Element: ${character.element}</span>
+                        </div>
+                    `;
+                    charactersDiv.appendChild(characterItem);
+                });
+
+                // Populate Stats Tab (Placeholder for now)
+                const statsDiv = document.getElementById('statsContent');
+                statsDiv.innerHTML = `
+                    <p>Total Matches Played: 10</p>
+                    <p>Most Picked Character: Raiden Shogun (5 matches)</p>
+                    <p>Highest Win Rate: spartanch1ck (80%)</p>
+                `;
+            } catch (error) {
+                console.error('Error loading tournament details:', error);
+                document.getElementById('tournamentDetails').innerHTML = `<p>Error loading tournament details: ${error.message}</p>`;
+            }
+        }
+
+        // Load the tournament details when the page loads
+        loadTournamentDetails();
+    </script>
+</body>
+</html>

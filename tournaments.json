@@ -18,5 +18,59 @@
             { "player": "DzeN", "place": "2nd", "prize": 2500 },
             { "player": "Peudan", "place": "3rd", "prize": 1200 }
         ]
+    },
+    {
+        "id": 3,
+        "name": "Abyss Cup Major 2025",
+        "date": "Feb 21st - Mar 5th 2025",
+        "image": "images/abysscup.jpg",
+        "winner": "spartanch1ck",
+        "prizePool": 1050,
+        "results": [
+            { "player": "spartanch1ck", "place": "1st", "prize": 500 },
+            { "player": "smertik", "place": "2nd", "prize": 200 },
+            { "player": "Alou", "place": "3rd", "prize": 150 },
+            { "player": "Linkle", "place": "4th", "prize": 100 },
+            { "player": "Mistikal", "place": "5-6", "prize": 50 },
+            { "player": "gr4G", "place": "5-6", "prize": 50 },
+            { "player": "Pmir", "place": "7-10", "prize": 0 },
+            { "player": "Kutsuki", "place": "7-10", "prize": 0 },
+            { "player": "Dze_n", "place": "7-10", "prize": 0 },
+            { "player": "Shiroja", "place": "7-10", "prize": 0 }
+        ],
+        "groupStage": {
+        "groupA": [
+            { "player": "Linkle", "wins": 3, "losses": 1 },
+            { "player": "Mistikal", "wins": 3, "losses": 1 },
+            { "player": "gr4G", "wins": 2, "losses": 2 },
+            { "player": "Pmir", "wins": 1, "losses": 3 },
+            { "player": "Dze_n", "wins": 1, "losses": 3 }
+        ],
+        "groupB": [
+            { "player": "spartanch1ck", "wins": 4, "losses": 0 },
+            { "player": "smertik", "wins": 3, "losses": 1 },
+            { "player": "Alou", "wins": 2, "losses": 2 },
+            { "player": "Kutsuki", "wins": 1, "losses": 3 },
+            { "player": "Shiroja", "wins": 0, "losses": 4 }
+        ]
+        },
+        "playoffBracket": [
+        { 
+            "name": "1/4", "matches": [
+            { "player1": "Mistikal", "player2": "Alou", "time": { "player1": "550", "player2": "549"}, "winner": "Alou" },
+            {  "player1": "smertik", "player2": "gr4G", "time": { "player1": "701", "player2": "768"} , "winner": "smertik" }
+            ]
+        },
+        { "name": "Semifinals", "matches": [
+            { "player1": "spartanch1ck", "player2": "Alou", "time": { "player1": "638", "player2": "698"}, "winner": "spartanch1ck" },
+            { "player1": "smertik", "player2": "Linkle", "time": { "player1": "635", "player2": "637"}, "winner": "smertik" }
+        ]},
+        { "name": "3rd Place Match", "matches": [
+            { "player1": "Alou", "player2": "Linkle", "time": { "player1": "543", "player2": "603"}, "winner": "Alou" }
+        ]},
+        { "name": "Final", "matches": [
+            { "player1": "spartanch1ck", "player2": "smertik", "time": { "player1": "610", "player2": "677"}, "winner": "spartanch1ck" }
+        ]}
+        ]
     }
 ]
