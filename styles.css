@@ -86,7 +86,7 @@ body {
 
 /* Tab Container */
 .tab-container {
-    background-color: #3a2155; /* Dark purple background (unchanged) */
+    background-color: #3a2155; /* Dark purple background */
     padding: 5px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -102,7 +102,7 @@ body {
 }
 
 .nav-tabs .custom-tab {
-    background-color: #4a2f70; /* Medium purple for tabs (unchanged) */
+    background-color: #4a2f70; /* Medium purple for tabs */
     color: #d3d3d3; /* Light gray text */
     border: none;
     border-radius: 6px;
@@ -113,12 +113,12 @@ body {
 }
 
 .nav-tabs .custom-tab:hover {
-    background-color: #5a3f85; /* Lighter purple on hover (unchanged) */
+    background-color: #5a3f85; /* Lighter purple on hover */
     color: #ffffff;
 }
 
 .nav-tabs .custom-tab.active {
-    background-color: #6a4f9a; /* Lightest purple for active tab (unchanged) */
+    background-color: #6a4f9a; /* Lightest purple for active tab */
     color: #ffffff;
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
@@ -144,14 +144,15 @@ h1, h2, h3 {
     padding: 20px 0;
     position: relative;
     width: 100%;
-    min-height: 500px; /* Increase height to accommodate pyramid structure */
+    min-height: 600px; /* Increased height for pyramid structure */
 }
+
 .bracket-round {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 220px;
+    min-width: 220px; /* Increase width for better spacing */
     position: relative;
 }
 
@@ -166,10 +167,10 @@ h1, h2, h3 {
     border-radius: 8px;
     padding: 10px;
     margin: 10px 0;
-    width: 200px; 
+    width: 200px; /* Slightly wider matches */
     text-align: left;
     position: relative;
-    z-index: 1; /* Ensure connectors are behind matches */
+    z-index: 1; /* Ensure matches are above SVG lines */
 }
 
 .bracket-match:hover {
@@ -192,18 +193,6 @@ h1, h2, h3 {
     font-size: 14px;
 }
 
-.time-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
-}
-
-.time-container span {
-    font-size: 14px;
-    padding: 3px 6px;
-    border-radius: 4px;
-}
-
 .time-winner {
     color: #2ecc71;
     font-weight: bold;
@@ -217,7 +206,7 @@ h1, h2, h3 {
 .bracket-round[data-round="0"] {
     justify-content: space-between; /* Spread out matches in the first round */
     height: 100%; /* Full height for pyramid effect */
-    padding: 20px 0; /* Add padding to spread matches */
+    padding: 40px 0; /* Increase padding to spread matches further */
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(1) {
@@ -229,25 +218,32 @@ h1, h2, h3 {
 }
 
 .bracket-round[data-round="1"] {
-    justify-content: center; /* Slightly less spread for semifinals */
-    height: 50%; /* Reduce height for pyramid effect */
-    margin-top: 40px; /* Offset to center vertically */
+    justify-content: center; /* Center the semifinals */
+    height: 60%; /* Slightly larger height for better centering */
+    gap: 60px; /* Increase space between semifinal matches */
+    margin-top: 20%; /* Push down to align with 1/4 matches */
 }
 
 .bracket-round[data-round="2"] {
     justify-content: flex-start; /* Align final and 3rd place match to the top */
     gap: 20px; /* Space between Final and 3rd Place Match */
+    margin-top: 30%; /* Center vertically relative to the bracket */
 }
 
 /* 3rd Place Match */
 .bracket-match.third-place-match {
-    border: 2px; /* Bronze border for 3rd place */
+    border: 2px solid #cd7f32; /* Bronze border for 3rd place */
 }
 
-/* Connector lines */
-.bracket-match::before,
-.bracket-match::after {
-    display: none;
+/* SVG Connector Lines */
+.bracket-connectors {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0; /* Ensure SVG lines are behind the matches */
 }
 
 /* Group Items */
@@ -282,6 +278,7 @@ h1, h2, h3 {
 .table-custom tbody tr:hover {
     background-color: #5a3f85; /* Lighter purple for hover */
 }
+
 .table-custom tbody tr.row-alternate {
     background-color: #4a2f70; /* Slightly darker purple for alternating rows */
 }
@@ -295,15 +292,15 @@ h1, h2, h3 {
 }
 
 .table-custom .fa-medal.text-warning {
-    color: #ffd700; /* Gold (unchanged) */
+    color: #ffd700; /* Gold */
 }
 
 .table-custom .fa-medal.text-secondary {
-    color: #c0c0c0; /* Silver (unchanged) */
+    color: #c0c0c0; /* Silver */
 }
 
 .table-custom .fa-medal.text-bronze {
-    color: #cd7f32; /* Bronze (unchanged) */
+    color: #cd7f32; /* Bronze */
 }
 
 /* Player Items */
@@ -366,29 +363,33 @@ h1, h2, h3 {
         margin: 3px;
         font-size: 14px;
     }
-
 }
 
 /* Player.html profiles + links */
 .fa-brands {
     color: #f8f9fa;
 }
+
 .social-btn i {
     font-size: 16px;
     display: inline-block;
 }
+
 .social-links {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
+
 .social-btn svg {
     vertical-align: middle;
     fill: none;
 }
+
 .social-btn:hover svg .s1 {
     fill: #4a2c6d;
 }
+
 .social-btn {
     width: 32px;
     height: 32px;
@@ -403,34 +404,43 @@ h1, h2, h3 {
     text-decoration: none !important;
     z-index: 5;
 }
+
 .social-btn:hover {
     background-color: #4a2c6d; /* Teal for social link hover */
     transform: scale(1.1);
 }
+
 .social-btn svg {
     width: 20px;
     height: 20px;
 }
+
 .social-btn i, .social-btn svg {
     pointer-events: none; /* Ensure clicks go to the link */
 }
+
 .container {
     padding: 20px;
     max-width: 1140px;
 }
+
 .mt-5 {
     margin-top: 3rem;
 }
+
 .mt-4 {
     margin-top: 1.5rem;
 }
+
 .btn-outline-light {
     border-color: #3a2155;
 }
+
 .btn-outline-light:hover {
     background: #3a2155;
     color: white;
 }
+
 .player-card-link {
     text-decoration: none;
     color: inherit;

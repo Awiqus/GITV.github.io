@@ -240,17 +240,15 @@
                     bracketContainer.className = 'bracket-container';
 
                     // Add SVG for connector lines
-                    const svg = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'svg');
+                    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                     svg.className = 'bracket-connectors';
                     bracketContainer.appendChild(svg);
 
-                    // Filter out the 3rd place match
+                    // Filter out the 3rd Place Match from the main bracket rounds
                     const mainBracketRounds = tournament.playoffBracket.filter(round => {
                         const roundName = round.name.toLowerCase().trim();
-                        console.log('Round Name:', roundName); // Debug logging
                         return roundName !== '3rd place match';
                     });
-                    console.log('Main Bracket Rounds:', mainBracketRounds); // Debug logging
 
                     // Find the 3rd Place Match
                     const thirdPlaceRound = tournament.playoffBracket.find(round => round.name.toLowerCase().trim() === '3rd place match');
@@ -279,7 +277,6 @@
                             // Apply winner/loser classes for times
                             const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
                             const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
-                            
                             
                             matchDiv.innerHTML = `
                                 <div class="match-row">
@@ -329,21 +326,26 @@
                                         <span class="bracket-player player2">${match.player2}</span>
                                         <span class="match-time ${player2TimeClass}">${player2Time}s</span>
                                     </div>
-                                `
+                                `;
                                 
                                 roundDiv.appendChild(matchDiv);
                             });
                         }
 
                         bracketContainer.appendChild(roundDiv);
-
                     });
 
+                    // Append the bracket container to the DOM before drawing connectors
                     playoffDiv.appendChild(bracketContainer);
 
                     // Draw connector lines using SVG
                     const drawConnectors = () => {
                         const svgElement = bracketContainer.querySelector('.bracket-connectors');
+                        if (!svgElement) {
+                            console.error('SVG element not found in bracket container');
+                            return;
+                        }
+
                         svgElement.innerHTML = ''; // Clear previous lines
 
                         const rounds = bracketContainer.querySelectorAll('.bracket-round');
@@ -358,8 +360,13 @@
                         svgElement.style.pointerEvents = 'none';
 
                         // Connect 1/4 to Semifinals
-                        const quarterMatches = rounds[0].querySelectorAll('.bracket-match');
-                        const semiMatches = rounds[1].querySelectorAll('.bracket-match');
+                        const quarterMatches = rounds[0]?.querySelectorAll('.bracket-match');
+                        const semiMatches = rounds[1]?.querySelectorAll('.bracket-match');
+
+                        if (!quarterMatches || !semiMatches) {
+                            console.error('Quarter or Semi matches not found');
+                            return;
+                        }
 
                         quarterMatches.forEach((quarterMatch, qIndex) => {
                             const semiMatch = semiMatches[qIndex];
@@ -375,7 +382,7 @@
 
                             const midX = (startX + endX) / 2;
 
-                            const path = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'path');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                             path.setAttribute('d', `
                                 M ${startX},${startY}
                                 H ${midX}
@@ -389,7 +396,7 @@
                         });
 
                         // Connect Semifinals to Final
-                        const finalMatches = rounds[2].querySelectorAll('.bracket-match:not(.third-place-match)');
+                        const finalMatches = rounds[2]?.querySelectorAll('.bracket-match:not(.third-place-match)');
                         const finalMatch = finalMatches[0]; // Only the Final match, not 3rd Place
                         if (finalMatch) {
                             semiMatches.forEach(semiMatch => {
@@ -403,7 +410,7 @@
 
                                 const midX = (startX + endX) / 2;
 
-                                const path = document.createElementNS('https://www.w3.org/TR/2018/CR-SVG2-20181004/', 'path');
+                                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                                 path.setAttribute('d', `
                                     M ${startX},${startY}
                                     H ${midX}
@@ -418,10 +425,22 @@
                         }
                     };
 
-                    // Draw connectors initially and on window resize
-                    drawConnectors();
-                    window.addEventListener('resize', drawConnectors);
-                    
+                    // Ensure the DOM is updated before drawing connectors
+                    setTimeout(() => {
+                        try {
+                            drawConnectors();
+                        } catch (error) {
+                            console.error('Error in drawConnectors:', error);
+                        }
+                    }, 0);
+
+                    window.addEventListener('resize', () => {
+                        try {
+                            drawConnectors();
+                        } catch (error) {
+                            console.error('Error in drawConnectors on resize:', error);
+                        }
+                    });
                 } else {
                     playoffDiv.innerHTML = '<p>No playoff bracket available.</p>';
                 }
@@ -465,6 +484,14 @@
                 // Populate Placements Table
                 const placementsDiv = document.getElementById('placements');
                 if (tournament.results && tournament.results.length > 0) {
+                    // Fetch player data for region
+                    const playersResponse = await fetch('players.json');
+                    if (!playersResponse.ok) {
+                        throw new Error(`Failed to fetch players.json: ${playersResponse.status} ${playersResponse.statusText}`);
+                    }
+                    const playersData = await playersResponse.json();
+                    const players = playersData.players;
+
                     const table = document.createElement('table');
                     table.className = 'table table-custom';
                     table.innerHTML = `
@@ -472,6 +499,7 @@
                             <tr>
                                 <th>Place</th>
                                 <th>Player</th>
+                                <th>Region</th>
                                 <th>Medal</th>
                                 <th>Prize</th>
                             </tr>
@@ -479,14 +507,24 @@
                         <tbody></tbody>
                     `;
                     const tbody = table.querySelector('tbody');
-                    tournament.results.forEach(result => {
+                    tournament.results.forEach((result, index) => {
+                        const player = players.find(p => p.alias === result.player) || {};
+                        const row = document.createElement('tr');
+                        // Add class for top 3 players
+                        let rowClass = '';
+                        if (result.place === '1st') rowClass = 'place-1st';
+                        else if (result.place === '2nd') rowClass = 'place-2nd';
+                        else if (result.place === '3rd') rowClass = 'place-3rd';
+                        // Add alternating row class
+                        if (index % 2 === 1) rowClass += ' row-alternate';
+                        row.className = rowClass;
                         const medal = result.place === '1st' ? '<i class="fas fa-medal text-warning"></i>' : 
                                      result.place === '2nd' ? '<i class="fas fa-medal text-secondary"></i>' : 
                                      result.place === '3rd' ? '<i class="fas fa-medal text-bronze"></i>' : '';
-                        const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${result.place}</td>
-                            <td>${result.player}</td>
+                            <td><a href="player.html?alias=${result.player}">${result.player}</a></td>
+                            <td>${player.region || 'Unknown'}</td>
                             <td>${medal}</td>
                             <td>$${result.prize}</td>
                         `;
