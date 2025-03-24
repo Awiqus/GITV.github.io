@@ -233,95 +233,110 @@
 
                 // Populate Play-off Bracket (Dynamic Data)
                 const playoffDiv = document.getElementById('playoffBracket');
+                playoffDiv.innerHTML = ''; // Clear the div to prevent duplicate rendering
                 if (tournament.playoffBracket && tournament.playoffBracket.length > 0) {
-                    // Separate main bracket and 3rd Place Match
-                    const mainBracketRounds = tournament.playoffBracket.filter(round => round.name.toLowerCase() !== '3rd place match');
-                    const thirdPlaceRound = tournament.playoffBracket.find(round => round.name.toLowerCase() === '3rd place match');
-
                     // Main Bracket (1/4, Semifinals, Final)
                     const bracketContainer = document.createElement('div');
                     bracketContainer.className = 'bracket-container';
-                    tournament.playoffBracket.forEach((round, roundIndex) => {
+
+                    // Filter out the 3rd place match
+                    const mainBracketRounds = tournament.playoffBracket.filter(round => {
+                        const roundName = round.name.toLowerCase().trim();
+                        console.log('Round Name:', roundName); // Debug logging
+                        return roundName !== '3rd place match';
+                    });
+                    console.log('Main Bracket Rounds:', mainBracketRounds); // Debug logging
+
+                    // Find the 3rd Place Match
+                    const thirdPlaceRound = tournament.playoffBracket.find(round => round.name.toLowerCase().trim() === '3rd place match');
+
+                    // Find the index of the Final round
+                    const finalRoundIndex = mainBracketRounds.findIndex(round => round.name.toLowerCase().trim() === 'final');
+
+                    mainBracketRounds.forEach((round, roundIndex) => {
                         const roundDiv = document.createElement('div');
                         roundDiv.className = 'bracket-round';
+                        roundDiv.dataset.round = roundIndex; // Add data attribute for CSS
                         roundDiv.innerHTML = `<h4>${round.name}</h4>`;
+
+                        // Add the matches for this round
                         round.matches.forEach((match, matchIndex) => {
                             const matchDiv = document.createElement('div');
                             matchDiv.className = 'bracket-match';
-
-                            // Determine if this is the final match
-                            const isFinal = round.name.toLowerCase() === 'final';
-
+                            
                             // Use times directly in seconds
                             const player1Time = match.time.player1;
                             const player2Time = match.time.player2;
-
+                            
                             // Determine winner based on times (faster time wins)
                             const player1Wins = parseInt(match.time.player1) < parseInt(match.time.player2);
-
+                            
                             // Apply winner/loser classes for times
                             const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
                             const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
-
-                            // Add final match class if applicable
-                            const timeContainerClass = isFinal ? 'time-container final-match' : 'time-container';
-
+                            
+                            
                             matchDiv.innerHTML = `
-                                <div class="bracket-player player1">${match.player1}</div>
-                                <div class="bracket-player player2">${match.player2}</div>
-                                <div class="${timeContainerClass}">
-                                    <span class="${player1TimeClass}">${match.player1}: ${player1Time}</span>
-                                    <span class="${player2TimeClass}">${match.player2}: ${player2Time}</span>
+                                <div class="match-row">
+                                    <span class="bracket-player player1">${match.player1}</span>
+                                    <span class="match-time ${player1TimeClass}">${player1Time}s</span>
+                                </div>
+                                <div class="match-row">
+                                    <span class="bracket-player player2">${match.player2}</span>
+                                    <span class="match-time ${player2TimeClass}">${player2Time}s</span>
                                 </div>
                             `;
-
+                            
                             // Add data attributes for connector lines
                             matchDiv.dataset.round = roundIndex;
                             matchDiv.dataset.match = matchIndex;
-
+                            
                             roundDiv.appendChild(matchDiv);
                         });
+
+                        // If this is the Final round and there is a 3rd Place Match, append it here
+                        if (roundIndex === finalRoundIndex && thirdPlaceRound) {
+                            const thirdPlaceHeader = document.createElement('h4');
+                            thirdPlaceHeader.textContent = thirdPlaceRound.name;
+                            roundDiv.appendChild(thirdPlaceHeader);
+
+                            thirdPlaceRound.matches.forEach(match => {
+                                const matchDiv = document.createElement('div');
+                                matchDiv.className = 'bracket-match third-place-match';
+                                
+                                // Use times directly in seconds
+                                const player1Time = match.time.player1;
+                                const player2Time = match.time.player2;
+                                
+                                // Determine winner based on times (faster time wins)
+                                const player1Wins = parseInt(match.time.player1) < parseInt(match.time.player2);
+                                
+                                // Apply winner/loser classes for times
+                                const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
+                                const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
+                                
+                                matchDiv.innerHTML = `
+                                    <div class="match-row">
+                                        <span class="bracket-player player1">${match.player1}</span>
+                                        <span class="match-time ${player1TimeClass}">${player1Time}s</span>
+                                    </div>
+                                    <div class="match-row">
+                                        <span class="bracket-player player2">${match.player2}</span>
+                                        <span class="match-time ${player2TimeClass}">${player2Time}s</span>
+                                    </div>
+                                `
+                                
+                                roundDiv.appendChild(matchDiv);
+                            });
+                        }
+
                         bracketContainer.appendChild(roundDiv);
+
                     });
                     playoffDiv.appendChild(bracketContainer);
 
 
-                    // 3rd Place Match (below the main bracket)
-                    if (thirdPlaceRound) {
-                        const thirdPlaceContainer = document.createElement('div');
-                        thirdPlaceContainer.className = 'third-place-container';
-                        const thirdPlaceRoundDiv = document.createElement('div');
-                        thirdPlaceRoundDiv.className = 'bracket-round third-place-round';
-                        thirdPlaceRoundDiv.innerHTML = `<h4>${thirdPlaceRound.name}</h4>`;
-                        thirdPlaceRound.matches.forEach(match => {
-                            const matchDiv = document.createElement('div');
-                            matchDiv.className = 'bracket-match third-place-match';
-                            
-                            // Use times directly in seconds
-                            const player1Time = match.time.player1;
-                            const player2Time = match.time.player2;
-                            
-                            // Determine winner based on times (faster time wins)
-                            const player1Wins = parseInt(match.time.player1) < parseInt(match.time.player2);
-                            
-                            // Apply winner/loser classes for times
-                            const player1TimeClass = player1Wins ? 'time-winner' : 'time-loser';
-                            const player2TimeClass = player1Wins ? 'time-loser' : 'time-winner';
-                            
-                            matchDiv.innerHTML = `
-                                <div class="bracket-player player1">${match.player1}</div>
-                                <div class="bracket-player player2">${match.player2}</div>
-                                <div class="time-container">
-                                    <span class="${player1TimeClass}">${player1Time}</span>
-                                    <span class="${player2TimeClass}">${player2Time}</span>
-                                </div>
-                            `;
-                            
-                            thirdPlaceRoundDiv.appendChild(matchDiv);
-                        });
-                        thirdPlaceContainer.appendChild(thirdPlaceRoundDiv);
-                        playoffDiv.appendChild(thirdPlaceContainer);
-                    }
+                    
                 } else {
                     playoffDiv.innerHTML = '<p>No playoff bracket available.</p>';
                 }
