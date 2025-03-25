@@ -169,7 +169,7 @@ h1, h2, h3 {
     min-width: 12vw; /* Reduced to minimize spacing */
     margin-right: 2rem; /* Add consistent spacing between rounds */
     position: relative;
-    padding: 1.25rem 0; /* Consistent with other rounds */
+    padding: 0; /* Remove padding to maximize height */
 }
 
 .bracket-round h4 {
@@ -234,7 +234,6 @@ h1, h2, h3 {
 .bracket-round[data-round="0"] {
     justify-content: space-between; /* Spread matches to top and bottom */
     height: 100%; /* Full height for pyramid effect */
-    padding: 1.25rem 0; /* Consistent with other rounds */
     margin-left: 1rem; /* Increased for more spacing (~16px) */
 }
 
@@ -248,16 +247,14 @@ h1, h2, h3 {
 
 .bracket-round[data-round="1"] {
     justify-content: space-between; /* Spread Semifinals matches */
-    height: 50%; /* Reduced to bring matches closer to the center */
-    padding: 1.25rem 0; /* Consistent with other rounds */
-    margin-top: 25%; /* Center the round vertically */
+    height: 80%; /* Increased to spread matches further */
+    margin-top: 10%; /* Adjusted to position the round */
 }
 
 .bracket-round[data-round="2"] {
     justify-content: flex-start; /* Align to top to control positioning */
     height: 100%; /* Full height to allow absolute positioning */
     position: relative; /* For absolute positioning of matches */
-    padding: 1.25rem 0; /* Consistent with other rounds */
 }
 
 .bracket-round[data-round="2"] .bracket-match:nth-child(1) {
@@ -270,7 +267,7 @@ h1, h2, h3 {
 
 .bracket-round[data-round="2"] .bracket-match:nth-child(2) {
     position: absolute;
-    bottom: 1.25rem; /* Align with the bottom Quarter-finals match */
+    bottom: 0; /* Align with the bottom of the container */
     width: 100%; /* Ensure it takes the full width of the round */
     z-index: 2; /* Lower z-index to prevent overlap */
 }
