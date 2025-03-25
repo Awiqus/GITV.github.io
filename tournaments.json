@@ -56,7 +56,7 @@
         },
         "playoffBracket": [
         { 
-            "name": "1/4", "matches": [
+            "name": "Quarter-finals", "matches": [
             { "player1": "Mistikal", "player2": "Alou", "time": { "player1": "550", "player2": "549"}, "winner": "Alou" },
             {  "player1": "smertik", "player2": "gr4G", "time": { "player1": "701", "player2": "768"} , "winner": "smertik" }
             ]

@@ -141,10 +141,10 @@ h1, h2, h3 {
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
-    padding: 20px 0;
+    padding: 1.25rem 0; /* Relative units */
     position: relative;
     width: 100%;
-    min-height: 600px; /* Increased height for pyramid structure */
+    min-height: 80vh; /* Relative to viewport height */
 }
 
 .bracket-round {
@@ -152,22 +152,22 @@ h1, h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 220px; /* Increase width for better spacing */
+    min-width: 20vw; /* Relative to viewport width */
     position: relative;
 }
 
 .bracket-round h4 {
     color: #d3d3d3;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
 }
 
 .bracket-match {
     background: #2c2c44;
     border: 1px solid #3a3a5a;
     border-radius: 8px;
-    padding: 10px;
-    margin: 10px 0;
-    width: 200px; /* Slightly wider matches */
+    padding: 0.625rem; /* Relative units */
+    margin: 0.625rem 0; /* Relative units */
+    width: 18vw; /* Relative to viewport width */
     text-align: left;
     position: relative;
     z-index: 1; /* Ensure matches are above SVG lines */
@@ -181,16 +181,16 @@ h1, h2, h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 0;
+    padding: 0.3rem 0; /* Relative units */
 }
 
 .bracket-player {
     color: #d3d3d3;
-    font-size: 14px;
+    font-size: 0.875rem; /* Relative units */
 }
 
 .match-time {
-    font-size: 14px;
+    font-size: 0.875rem; /* Relative units */
 }
 
 .time-winner {
@@ -206,7 +206,7 @@ h1, h2, h3 {
 .bracket-round[data-round="0"] {
     justify-content: space-between; /* Spread out matches in the first round */
     height: 100%; /* Full height for pyramid effect */
-    padding: 40px 0; /* Increase padding to spread matches further */
+    padding: 2.5rem 0; /* Relative units */
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(1) {
@@ -220,19 +220,14 @@ h1, h2, h3 {
 .bracket-round[data-round="1"] {
     justify-content: center; /* Center the semifinals */
     height: 60%; /* Slightly larger height for better centering */
-    gap: 60px; /* Increase space between semifinal matches */
+    gap: 3.75rem; /* Relative units */
     margin-top: 20%; /* Push down to align with 1/4 matches */
 }
 
 .bracket-round[data-round="2"] {
     justify-content: flex-start; /* Align final and 3rd place match to the top */
-    gap: 20px; /* Space between Final and 3rd Place Match */
+    gap: 1.25rem; /* Relative units */
     margin-top: 30%; /* Center vertically relative to the bracket */
-}
-
-/* 3rd Place Match */
-.bracket-match.third-place-match {
-    border: 2px solid #cd7f32; /* Bronze border for 3rd place */
 }
 
 /* SVG Connector Lines */
@@ -251,6 +246,8 @@ h1, h2, h3 {
     background-color: #4a2f70; /* Medium purple */
     color: #d3d3d3;
     transition: background-color 0.2s;
+    padding: 0.5rem; /* Relative units */
+    margin-bottom: 0.5rem; /* Relative units */
 }
 
 .group-item:hover {
