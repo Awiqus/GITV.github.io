@@ -139,7 +139,7 @@ h1, h2, h3 {
 /* Playoff Bracket */
 .bracket-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* Align rounds to the left */
     padding: 1.25rem 0; /* Relative units */
     position: relative;
     width: 60%;
@@ -151,7 +151,8 @@ h1, h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 16vw; /* Relative to viewport width */
+    min-width: 12vw; /* Reduced to minimize spacing */
+    margin-right: 2rem; /* Add consistent spacing between rounds */
     position: relative;
 }
 
@@ -168,6 +169,7 @@ h1, h2, h3 {
     width: 12vw; /* Relative to viewport width */
     text-align: left;
     position: relative;
+    z-index: 1; /* Ensure matches are above SVG lines */
 }
 
 .bracket-match:hover {
@@ -201,9 +203,9 @@ h1, h2, h3 {
 
 /* Pyramid Structure */
 .bracket-round[data-round="0"] {
-    justify-content: flex-start; /* Spread out matches in the first round */
+    justify-content: space-between; /* Spread matches to top and bottom */
     height: 100%; /* Full height for pyramid effect */
-    padding: 2rem 0; /* Relative units */
+    padding: 1rem 0; /* Reduced padding to maximize vertical space */
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(1) {
@@ -211,21 +213,21 @@ h1, h2, h3 {
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(2) {
-    margin-bottom: 10; /* Second match at the bottom */
+    margin-bottom: 0; /* Second match at the bottom */
 }
 
 .bracket-round[data-round="1"] {
-    justify-content: space-between; /* Center the semifinals */
-    height: 80%; /* Slightly larger height for better centering */
-    gap: 6rem 0; /* Relative units */
-    margin-top: 10%; /* Push down to align with 1/4 matches */
+    justify-content: space-between; /* Spread Semifinals matches */
+    height: 70%; /* Slightly smaller than Quarter-finals */
+    padding: 4rem 0; /* Push matches closer to top and bottom */
+    margin-top: 15%; /* Position relative to Quarter-finals */
 }
 
 .bracket-round[data-round="2"] {
-    justify-content: center; /* Align final and 3rd place match to the top */
-    gap: 1.25rem; /* Relative units */
-    margin-top: 20%; /* Center vertically relative to the bracket */
-    height: 60%;
+    justify-content: center; /* Center the Final and 3rd Place Match */
+    height: 50%; /* Smaller height for the apex */
+    margin-top: 25%; /* Center vertically */
+    gap: 1.25rem; /* Space between Final and 3rd Place Match */
 }
 
 /* SVG Connector Lines */
