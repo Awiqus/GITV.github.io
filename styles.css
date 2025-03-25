@@ -206,6 +206,7 @@ h1, h2, h3 {
     justify-content: space-between; /* Spread matches to top and bottom */
     height: 100%; /* Full height for pyramid effect */
     padding: 1rem 0; /* Reduced padding to maximize vertical space */
+    margin-left: 0.625rem; /* Add small left spacing (~10px) */
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(1) {
