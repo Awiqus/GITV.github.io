@@ -235,7 +235,7 @@
                 const playoffDiv = document.getElementById('playoffBracket');
                 playoffDiv.innerHTML = ''; // Clear the div to prevent duplicate rendering
                 if (tournament.playoffBracket && tournament.playoffBracket.length > 0) {
-                    // Main Bracket (1/4, Semifinals, Final)
+                    // Main Bracket (Quarter-finals, Semifinals, Final)
                     const bracketContainer = document.createElement('div');
                     bracketContainer.className = 'bracket-container';
 
@@ -260,7 +260,9 @@
                         const roundDiv = document.createElement('div');
                         roundDiv.className = 'bracket-round';
                         roundDiv.dataset.round = roundIndex; // Add data attribute for CSS
-                        roundDiv.innerHTML = `<h4>${round.name}</h4>`;
+                        // Rename "1/4" to "Quarter-finals"
+                        const roundName = round.name === '1/4' ? 'Quarter-finals' : round.name;
+                        roundDiv.innerHTML = `<h4>${roundName}</h4>`;
 
                         // Add the matches for this round
                         round.matches.forEach((match, matchIndex) => {
@@ -351,6 +353,9 @@
                         const rounds = bracketContainer.querySelectorAll('.bracket-round');
                         const containerRect = bracketContainer.getBoundingClientRect();
 
+                        // Debug: Log container dimensions
+                        console.log('Container dimensions:', containerRect.width, containerRect.height);
+
                         // Set SVG dimensions
                         svgElement.setAttribute('width', containerRect.width);
                         svgElement.setAttribute('height', containerRect.height);
@@ -359,7 +364,7 @@
                         svgElement.style.left = '0';
                         svgElement.style.pointerEvents = 'none';
 
-                        // Connect 1/4 to Semifinals
+                        // Connect Quarter-finals to Semifinals
                         const quarterMatches = rounds[0]?.querySelectorAll('.bracket-match');
                         const semiMatches = rounds[1]?.querySelectorAll('.bracket-match');
 
@@ -380,6 +385,9 @@
                             const endX = semiRect.left - containerRect.left;
                             const endY = semiRect.top + semiRect.height / 2 - containerRect.top;
 
+                            // Debug: Log coordinates
+                            console.log(`Quarter to Semi (${qIndex}): startX=${startX}, startY=${startY}, endX=${endX}, endY=${endY}`);
+
                             const midX = (startX + endX) / 2;
 
                             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -389,10 +397,13 @@
                                 V ${endY}
                                 H ${endX}
                             `);
-                            path.setAttribute('stroke', '#3a3a5a');
-                            path.setAttribute('stroke-width', '2');
+                            path.setAttribute('stroke', '#9b59b6'); // Purple accent for visibility
+                            path.setAttribute('stroke-width', '3'); // Thicker lines
                             path.setAttribute('fill', 'none');
                             svgElement.appendChild(path);
+
+                            // Debug: Log the path element
+                            console.log('Path created:', path);
                         });
 
                         // Connect Semifinals to Final
@@ -408,6 +419,9 @@
                                 const endX = finalRect.left - containerRect.left;
                                 const endY = finalRect.top + finalRect.height / 2 - containerRect.top;
 
+                                // Debug: Log coordinates
+                                console.log(`Semi to Final: startX=${startX}, startY=${startY}, endX=${endX}, endY=${endY}`);
+
                                 const midX = (startX + endX) / 2;
 
                                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -417,22 +431,28 @@
                                     V ${endY}
                                     H ${endX}
                                 `);
-                                path.setAttribute('stroke', '#3a3a5a');
-                                path.setAttribute('stroke-width', '2');
+                                path.setAttribute('stroke', '#9b59b6'); // Purple accent for visibility
+                                path.setAttribute('stroke-width', '3'); // Thicker lines
                                 path.setAttribute('fill', 'none');
                                 svgElement.appendChild(path);
+
+                                // Debug: Log the path element
+                                console.log('Path created:', path);
                             });
                         }
+
+                        // Debug: Log the SVG content
+                        console.log('SVG content:', svgElement.innerHTML);
                     };
 
-                    // Ensure the DOM is updated before drawing connectors
+                    // Ensure the DOM is fully rendered before drawing connectors
                     setTimeout(() => {
                         try {
                             drawConnectors();
                         } catch (error) {
                             console.error('Error in drawConnectors:', error);
                         }
-                    }, 0);
+                    }, 100); // Increased delay to ensure DOM rendering
 
                     window.addEventListener('resize', () => {
                         try {

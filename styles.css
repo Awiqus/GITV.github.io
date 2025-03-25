@@ -140,10 +140,9 @@ h1, h2, h3 {
 .bracket-container {
     display: flex;
     justify-content: space-between;
-    overflow-x: auto;
     padding: 1.25rem 0; /* Relative units */
     position: relative;
-    width: 100%;
+    width: 60%;
     min-height: 80vh; /* Relative to viewport height */
 }
 
@@ -152,7 +151,7 @@ h1, h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 20vw; /* Relative to viewport width */
+    min-width: 16vw; /* Relative to viewport width */
     position: relative;
 }
 
@@ -166,11 +165,9 @@ h1, h2, h3 {
     border: 1px solid #3a3a5a;
     border-radius: 8px;
     padding: 0.625rem; /* Relative units */
-    margin: 0.625rem 0; /* Relative units */
-    width: 18vw; /* Relative to viewport width */
+    width: 12vw; /* Relative to viewport width */
     text-align: left;
     position: relative;
-    z-index: 1; /* Ensure matches are above SVG lines */
 }
 
 .bracket-match:hover {
@@ -204,9 +201,9 @@ h1, h2, h3 {
 
 /* Pyramid Structure */
 .bracket-round[data-round="0"] {
-    justify-content: space-between; /* Spread out matches in the first round */
+    justify-content: flex-start; /* Spread out matches in the first round */
     height: 100%; /* Full height for pyramid effect */
-    padding: 2.5rem 0; /* Relative units */
+    padding: 2rem 0; /* Relative units */
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(1) {
@@ -214,20 +211,21 @@ h1, h2, h3 {
 }
 
 .bracket-round[data-round="0"] .bracket-match:nth-child(2) {
-    margin-bottom: 0; /* Second match at the bottom */
+    margin-bottom: 10; /* Second match at the bottom */
 }
 
 .bracket-round[data-round="1"] {
-    justify-content: center; /* Center the semifinals */
-    height: 60%; /* Slightly larger height for better centering */
-    gap: 3.75rem; /* Relative units */
-    margin-top: 20%; /* Push down to align with 1/4 matches */
+    justify-content: space-between; /* Center the semifinals */
+    height: 80%; /* Slightly larger height for better centering */
+    gap: 6rem 0; /* Relative units */
+    margin-top: 10%; /* Push down to align with 1/4 matches */
 }
 
 .bracket-round[data-round="2"] {
-    justify-content: flex-start; /* Align final and 3rd place match to the top */
+    justify-content: center; /* Align final and 3rd place match to the top */
     gap: 1.25rem; /* Relative units */
-    margin-top: 30%; /* Center vertically relative to the bracket */
+    margin-top: 20%; /* Center vertically relative to the bracket */
+    height: 60%;
 }
 
 /* SVG Connector Lines */
